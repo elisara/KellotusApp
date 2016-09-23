@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    tools:context="com.example.elisarajaniemi.kellotusapp.LocationAndMap"
+    tools:showIn="@layout/activity_main"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:gravity="center"
-        android:paddingBottom="60dp"
+        android:paddingBottom="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -37,4 +40,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>
