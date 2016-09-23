@@ -9,22 +9,11 @@
     tools:context="com.example.elisarajaniemi.kellotusapp.MainActivity"
     tools:showIn="@layout/activity_main">
 
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/frag_container"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-    </LinearLayout>
-
     <fragment xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/scanner_fragment"
         android:name="com.mbientlab.bletoolbox.scanner.BleScannerFragment"
         tools:layout="@layout/blescan_device_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
 
 </RelativeLayout>

@@ -29,10 +29,7 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
     private MetaWearBleService.LocalBinder serviceBinder;
     private MetaWearBoard mwBoard;
-    Devices devices;
-    Results results;
-    LocationAndMap lam;
-    Button mapButton, resultsButton, scanButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,30 +40,7 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
 
-        devices = new Devices();
-        results = new Results();
-        lam = new LocationAndMap();
-
         //getSupportFragmentManager().beginTransaction().add(R.id.frag_container, lam).commit();
-
-        mapButton = (Button) findViewById(R.id.mapbtn);
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, lam).commit();
-            }
-        });
-        resultsButton = (Button) findViewById(R.id.resultbtn);
-        resultsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, results).commit();
-            }
-        });
-        scanButton = (Button) findViewById(R.id.scanbtn);
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, devices).commit();
-            }
-        });
 
 
     }

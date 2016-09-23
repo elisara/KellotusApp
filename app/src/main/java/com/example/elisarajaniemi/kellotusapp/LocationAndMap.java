@@ -217,8 +217,7 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
             // Set the output data rate to 25Hz or closet valid value
             accModule.setOutputDataRate(4.f);
         } catch (UnsupportedModuleException e) {
-            Snackbar.make(getActivity().findViewById(R.id.device_setup_fragment), e.getMessage(),
-                    Snackbar.LENGTH_SHORT).show();
+            //Snackbar.make(getActivity().findViewById(R.id.device_setup_fragment), e.getMessage(), Snackbar.LENGTH_SHORT).show();
         }
     }
 

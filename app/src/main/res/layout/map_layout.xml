@@ -22,7 +22,6 @@
 
         <TextView
             android:id="@+id/timeview"
-            android:text="0"
             android:textSize="30dp"
             android:gravity="center"
             android:layout_width="match_parent"
