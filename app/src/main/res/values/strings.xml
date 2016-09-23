@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">KellotusApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="result">Results</string>
+    <string name="scan">Scan</string>
+    <string name="no_location_detected">No location detected</string>
+</resources>
