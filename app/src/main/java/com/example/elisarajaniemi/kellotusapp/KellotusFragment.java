@@ -36,6 +36,7 @@ import com.mbientlab.metawear.data.CartesianFloat;
 import com.mbientlab.metawear.module.Accelerometer;
 
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
@@ -75,6 +76,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected String mLatitudeLabel;
     protected String mLongitudeLabel;
     private DecimalFormatSymbols df;
+    private ArrayList resultList;
+    private ResultsDBHelper rdbh;
+    private boolean resultDone;
+    private double dbtime;
+    private double kellotustime;
+
 
 
     public KellotusFragment(){
@@ -91,6 +98,9 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         d = 0;
         strBuild = new StringBuilder();
         kellotusData = "";
+        resultDone = false;
+
+        rdbh = new ResultsDBHelper(getContext());
 
 
         Activity owner= getActivity();
@@ -123,7 +133,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         }
 
         buildGoogleApiClient();
-
         return view;
     }
 
@@ -236,6 +245,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         view.findViewById(R.id.readybtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resultDone = false;
                 kellotettu = false;
                 loppu = false;
                 aloitettu = false;
@@ -279,6 +289,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                                 }
                                 if(kellotettu == true && aloitettu == true && loppu == true){
                                     mHandler.removeCallbacks(startTimer);
+                                    int date = (int)endTime % Integer.MAX_VALUE;
+                                    if (resultDone == false) {
+                                        rdbh.insertResults("uusosote", dbtime, kellotustime, date, "comment", "name");
+                                        resultDone = true;
+                                    }
                                 }
 
                             }
@@ -298,8 +313,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         public void run() {
 
             elapsedTime = (System.currentTimeMillis() - startTime);
-            timeResult = (endTime - startTime) / 1000.0;
+            //timeResult = (endTime - startTime) / 1000.0;
             mHandler.postDelayed(this, REFRESH_RATE);
+            dbtime = elapsedTime/1000.0;
+            kellotustime = elapsedTime/1000;
             textView.setText("" + elapsedTime / 1000.0);
 
 
