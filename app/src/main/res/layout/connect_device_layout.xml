@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.elisarajaniemi.kellotusapp.DeviceSetupActivity">
+    tools:context=".ConnectDeviceActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/mapbtn"
-                android:text="MAP"
+                android:text="Kellotus"
                 android:layout_weight="1"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
@@ -37,17 +37,10 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <Button
-                android:id="@+id/scanbtn"
-                android:text="SCAN"
-                android:layout_weight="1"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_device_setup" />
+    <include layout="@layout/content_connect_device" />
 
 </android.support.design.widget.CoordinatorLayout>

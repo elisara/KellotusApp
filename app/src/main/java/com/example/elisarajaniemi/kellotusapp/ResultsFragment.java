@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
  */
-public class Results extends Fragment {
+public class ResultsFragment extends Fragment {
 
     private ListView listview;
     private ArrayList resultlist;

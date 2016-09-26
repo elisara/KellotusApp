@@ -6,22 +6,19 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+
 import com.mbientlab.bletoolbox.scanner.BleScannerFragment;
 import com.mbientlab.metawear.MetaWearBleService;
 import com.mbientlab.metawear.MetaWearBoard;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity  implements BleScannerFragment.ScannerCommunicationBus, ServiceConnection {
@@ -40,7 +37,14 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
 
-        //getSupportFragmentManager().beginTransaction().add(R.id.frag_container, lam).commit();
+        //Forces the language to be English
+        String languageToLoad  = "en";
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
 
 
     }
@@ -96,8 +100,8 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
             public void connected() {
                 connectDialog.dismiss();
 
-                Intent navActivityIntent = new Intent(MainActivity.this, DeviceSetupActivity.class);
-                navActivityIntent.putExtra(DeviceSetupActivity.EXTRA_BT_DEVICE, device);
+                Intent navActivityIntent = new Intent(MainActivity.this, ConnectDeviceActivity.class);
+                navActivityIntent.putExtra(ConnectDeviceActivity.EXTRA_BT_DEVICE, device);
                 startActivityForResult(navActivityIntent, REQUEST_START_APP);
             }
 

@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,15 +35,12 @@ import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.data.CartesianFloat;
 import com.mbientlab.metawear.module.Accelerometer;
 
-import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
  */
-public class LocationAndMap extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,ServiceConnection {
+public class KellotusFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,ServiceConnection {
 
     public interface FragmentSettings {
         BluetoothDevice getBtDevice();
@@ -56,7 +52,10 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
     private FragmentSettings settings;
     private Accelerometer accModule;
     TextView textView;
+    TextView textView2;
+    TextView textView3;
     private String message;
+    private String rawData;
     private int REFRESH_RATE;
     private double d;
     private long startTime;
@@ -66,6 +65,8 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
     private boolean kellotettu;
     private boolean loppu;
     private boolean aloitettu;
+    private StringBuilder strBuild;
+    private String kellotusData;
 
     private MapView mapView;
     private GoogleMap map;
@@ -75,7 +76,8 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
     protected String mLongitudeLabel;
     private DecimalFormatSymbols df;
 
-    public LocationAndMap(){
+
+    public KellotusFragment(){
     }
 
     @Override
@@ -87,6 +89,9 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
         loppu = false;
         aloitettu = false;
         d = 0;
+        strBuild = new StringBuilder();
+        kellotusData = "";
+
 
 
 
@@ -102,8 +107,10 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.map_layout, container, false);
+        View view = inflater.inflate(R.layout.kellotus_layout, container, false);
         textView = (TextView) view.findViewById(R.id.timeview);
+        textView2 = (TextView) view.findViewById(R.id.angleview);
+        textView3 = (TextView) view.findViewById(R.id.dataview);
 
         mapView = (MapView) view.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
@@ -117,7 +124,8 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
             e.printStackTrace();
         }
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(60.18, 24.83), 13);
         map.animateCamera(cameraUpdate);
         buildGoogleApiClient();
 
@@ -237,14 +245,15 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
                                     public void process(Message msg) {
                                         df = new DecimalFormatSymbols();
                                         df.setDecimalSeparator('.');
-                                        message = msg.getData(CartesianFloat.class).toString().substring(1, 6);
-
-                                            d = Double.parseDouble(message);
-                                            d = (d + 1.03) * 90;
+                                        rawData = msg.getData(CartesianFloat.class).toString();
+                                        message = rawData.substring(1, 6);
+                                        d = Double.parseDouble(message);
+                                        d = (d + 1.03) * 90;
 
                                         //Log.i("tutorial", msg.getData(CartesianFloat.class).toString());
-
-
+                                        mHandler2.removeCallbacks(angle);
+                                        mHandler2.postDelayed(angle, 0);
+                                        strBuild.append(rawData + "\n");
                                         if(d >= 50 && aloitettu == false && kellotettu == false){
                                             aloitettu = true;
                                             startTime = System.currentTimeMillis();
@@ -262,7 +271,7 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
                                             endTime = System.currentTimeMillis();
                                             //Log.i("Timestamp end ", endTime.toString());
                                             Log.i("Result ", String.valueOf(timeResult));
-
+                                            kellotusData = strBuild.toString();
                                         }
                                         if(kellotettu == true && aloitettu == true && loppu == true){
                                             kellotettu = false;
@@ -271,6 +280,9 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
                                             //mChronometer.stop();
                                             //textView.append("Result: " + timeResult + "\n");
                                             mHandler.removeCallbacks(startTimer);
+
+
+
 
                                         }
 
@@ -282,27 +294,10 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
                         });
             }
         });
-        /**
-        view.findViewById(R.id.acc_stop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                accModule.stop();
-                accModule.disableAxisSampling();
-                mwBoard.removeRoutes();
-            }
-        });
-         */
+
     }
 
-    /** private final Runnable mUpdateUITimerTask = new Runnable() {
-    @Override
-    public void run() {
-    //textView.setText("Timer: " + mChronometer.start());
-    mChronometer.setBase(SystemClock.elapsedRealtime());
-    mChronometer.start();
-    }
-    };
-     */
+
     private final Runnable startTimer = new Runnable() {
         @Override
         public void run() {
@@ -310,11 +305,30 @@ public class LocationAndMap extends Fragment implements GoogleApiClient.Connecti
             elapsedTime = (System.currentTimeMillis() - startTime);
             timeResult = (endTime - startTime) / 1000.0;
             mHandler.postDelayed(this, REFRESH_RATE);
-            textView.setText("Time: " + elapsedTime / 1000.0);
+            textView.setText("" + elapsedTime / 1000.0);
+
+
+
+        }
+    };
+    private final Runnable angle = new Runnable() {
+        @Override
+        public void run() {
+            mHandler2.postDelayed(this, REFRESH_RATE);
+
+            Long l = Math.round(d);
+            int i = Integer.valueOf(l.intValue());
+            if (i<0) i=0;
+            else if (i>180) i=180;
+            textView2.setText("" + i);
+            textView3.setText(kellotusData);
+
+
+
 
         }
     };
 
     private final Handler mHandler = new Handler();
-
+    private final Handler mHandler2 = new Handler();
 }

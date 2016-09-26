@@ -25,18 +25,17 @@ import android.widget.Button;
 import com.mbientlab.metawear.MetaWearBleService;
 import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.MetaWearBoard.ConnectionStateHandler;
-import com.example.elisarajaniemi.kellotusapp.LocationAndMap.FragmentSettings;
+import com.example.elisarajaniemi.kellotusapp.KellotusFragment.FragmentSettings;
 
-public class DeviceSetupActivity extends AppCompatActivity implements ServiceConnection, FragmentSettings {
-    public final static String EXTRA_BT_DEVICE= "com.example.elisarajaniemi.kellotusapp.DeviceSetupActivity.EXTRA_BT_DEVICE";
+public class ConnectDeviceActivity extends AppCompatActivity implements ServiceConnection, FragmentSettings {
+    public final static String EXTRA_BT_DEVICE= "com.example.elisarajaniemi.kellotusapp.ConnectDeviceActivity.EXTRA_BT_DEVICE";
 
-    Button mapButton, resultsButton, scanButton;
-    Devices devices;
-    Results results;
-    LocationAndMap lam;
+    Button mapButton, resultsButton;
+    ResultsFragment results;
+    KellotusFragment kellotus;
 
     public static class ReconnectDialogFragment extends DialogFragment implements  ServiceConnection {
-        private static final String KEY_BLUETOOTH_DEVICE = "com.example.elisarajaniemi.kellotusapp.DeviceSetupActivity.ReconnectDialogFragment.KEY_BLUETOOTH_DEVICE";
+        private static final String KEY_BLUETOOTH_DEVICE = "com.example.elisarajaniemi.kellotusapp.ConnectDeviceActivity.ReconnectDialogFragment.KEY_BLUETOOTH_DEVICE";
 
         private ProgressDialog reconnectDialog = null;
         private BluetoothDevice btDevice = null;
@@ -69,6 +68,7 @@ public class DeviceSetupActivity extends AppCompatActivity implements ServiceCon
                 public void onClick(DialogInterface dialogInterface, int i) {
                     currentMwBoard.disconnect();
                     getActivity().finish();
+
                 }
             });
 
@@ -91,9 +91,8 @@ public class DeviceSetupActivity extends AppCompatActivity implements ServiceCon
     private final ConnectionStateHandler connectionHandler= new MetaWearBoard.ConnectionStateHandler() {
         @Override
         public void connected() {
-            System.out.println("In connected");
             ((DialogFragment) getSupportFragmentManager().findFragmentByTag(RECONNECT_DIALOG_TAG)).dismiss();
-            //((LocationAndMap) getSupportFragmentManager().findFragmentById(R.id.device_setup_fragment)).reconnected();
+            //((KellotusFragment) getSupportFragmentManager().findFragmentById(R.id.device_setup_fragment)).reconnected();
             System.out.println("Connected");
         }
 
@@ -122,21 +121,20 @@ public class DeviceSetupActivity extends AppCompatActivity implements ServiceCon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_setup);
+        setContentView(R.layout.connect_device_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         btDevice= getIntent().getParcelableExtra(EXTRA_BT_DEVICE);
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
 
-        devices = new Devices();
-        results = new Results();
-        lam = new LocationAndMap();
+        results = new ResultsFragment();
+        kellotus = new KellotusFragment();
 
         mapButton = (Button) findViewById(R.id.mapbtn);
         mapButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, lam).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, kellotus).commit();
             }
         });
         resultsButton = (Button) findViewById(R.id.resultbtn);
@@ -145,12 +143,7 @@ public class DeviceSetupActivity extends AppCompatActivity implements ServiceCon
                 getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, results).commit();
             }
         });
-        scanButton = (Button) findViewById(R.id.scanbtn);
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, devices).commit();
-            }
-        });
+
     }
 
     @Override
@@ -184,6 +177,7 @@ public class DeviceSetupActivity extends AppCompatActivity implements ServiceCon
     public void onServiceConnected(ComponentName name, IBinder service) {
         mwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(btDevice);
         mwBoard.setConnectionStateHandler(connectionHandler);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, kellotus).commit();
     }
 
     @Override
