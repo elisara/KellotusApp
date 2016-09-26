@@ -93,8 +93,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         kellotusData = "";
 
 
-
-
         Activity owner= getActivity();
         if (!(owner instanceof FragmentSettings)) {
             throw new ClassCastException("Owning activity must implement the FragmentSettings interface");
@@ -124,9 +122,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             e.printStackTrace();
         }
 
-
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(60.18, 24.83), 13);
-        map.animateCamera(cameraUpdate);
         buildGoogleApiClient();
 
         return view;
@@ -179,10 +174,15 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         loc = LocationServices.FusedLocationApi.getLastLocation(gac);
         if (loc != null) {
             System.out.println(String.format("%s: %f", mLatitudeLabel, loc.getLatitude()));
+            System.out.println("Latitude: " + loc.getLatitude());
             System.out.println(String.format("%s: %f", mLongitudeLabel, loc.getLongitude()));
+            System.out.println("Longitude: " + loc.getLongitude());
         } else {
             System.out.println("No location detected");
         }
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
+        map.animateCamera(cameraUpdate);
     }
 
     @Override
@@ -236,62 +236,57 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         view.findViewById(R.id.readybtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                kellotettu = false;
+                loppu = false;
+                aloitettu = false;
+                textView.setText("");
                 accModule.routeData().fromAxes().stream("acc_stream").commit()
                         .onComplete(new AsyncOperation.CompletionHandler<RouteManager>() {
+                    @Override
+                    public void success(final RouteManager result) {
+                        result.subscribe("acc_stream", new RouteManager.MessageHandler() {
                             @Override
-                            public void success(final RouteManager result) {
-                                result.subscribe("acc_stream", new RouteManager.MessageHandler() {
-                                    @Override
-                                    public void process(Message msg) {
-                                        df = new DecimalFormatSymbols();
-                                        df.setDecimalSeparator('.');
-                                        rawData = msg.getData(CartesianFloat.class).toString();
-                                        message = rawData.substring(1, 6);
-                                        d = Double.parseDouble(message);
-                                        d = (d + 1.03) * 90;
+                            public void process(Message msg) {
+                                df = new DecimalFormatSymbols();
+                                df.setDecimalSeparator('.');
+                                rawData = msg.getData(CartesianFloat.class).toString();
+                                message = rawData.substring(1, 6);
+                                d = Double.parseDouble(message);
+                                d = (d + 1.03) * 90;
 
-                                        //Log.i("tutorial", msg.getData(CartesianFloat.class).toString());
-                                        mHandler2.removeCallbacks(angle);
-                                        mHandler2.postDelayed(angle, 0);
-                                        strBuild.append(rawData + "\n");
-                                        if(d >= 50 && aloitettu == false && kellotettu == false){
-                                            aloitettu = true;
-                                            startTime = System.currentTimeMillis();
-                                            //Log.i("Timestamp start ", startTime.toString());
-                                            //mHandler.post(mUpdateUITimerTask);
-                                            mHandler.removeCallbacks(startTimer);
-                                            mHandler.postDelayed(startTimer, 0);
+                                //Log.i("tutorial", msg.getData(CartesianFloat.class).toString());
+                                mHandler2.removeCallbacks(angle);
+                                mHandler2.postDelayed(angle, 0);
+                                strBuild.append(rawData + "\n");
+                                if(d >= 50 && aloitettu == false && kellotettu == false){
+                                    aloitettu = true;
+                                    startTime = System.currentTimeMillis();
+                                    //Log.i("Timestamp start ", startTime.toString());
+                                    //mHandler.post(mUpdateUITimerTask);
+                                    mHandler.removeCallbacks(startTimer);
+                                    mHandler.postDelayed(startTimer, 0);
 
-                                        }
-                                        if(d > 100){
-                                            kellotettu = true;
-                                        }
-                                        if(d < 90 && kellotettu == true && loppu == false){
-                                            loppu = true;
-                                            endTime = System.currentTimeMillis();
-                                            //Log.i("Timestamp end ", endTime.toString());
-                                            Log.i("Result ", String.valueOf(timeResult));
-                                            kellotusData = strBuild.toString();
-                                        }
-                                        if(kellotettu == true && aloitettu == true && loppu == true){
-                                            kellotettu = false;
-                                            loppu = false;
-                                            aloitettu = false;
-                                            //mChronometer.stop();
-                                            //textView.append("Result: " + timeResult + "\n");
-                                            mHandler.removeCallbacks(startTimer);
+                                }
+                                if(d > 100){
+                                    kellotettu = true;
+                                }
+                                if(d < 90 && kellotettu == true && loppu == false){
+                                    loppu = true;
+                                    endTime = System.currentTimeMillis();
+                                    //Log.i("Timestamp end ", endTime.toString());
+                                    Log.i("Result ", String.valueOf(timeResult));
+                                    kellotusData = strBuild.toString();
+                                }
+                                if(kellotettu == true && aloitettu == true && loppu == true){
+                                    mHandler.removeCallbacks(startTimer);
+                                }
 
-
-
-
-                                        }
-
-                                    }
-                                });
-                                accModule.enableAxisSampling();
-                                accModule.start();
                             }
                         });
+                        accModule.enableAxisSampling();
+                        accModule.start();
+                    }
+                });
             }
         });
 
