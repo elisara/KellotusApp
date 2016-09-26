@@ -1,21 +1,25 @@
 package com.example.elisarajaniemi.kellotusapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.ResultReceiver;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -81,6 +85,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private boolean resultDone;
     private double dbtime;
     private double kellotustime;
+    protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
+    protected static final String LOCATION_ADDRESS_KEY = "location-address";
+    protected String mAddressOutput;
+    protected boolean mAddressRequested;
+    private AddressResultReceiver mResultReceiver;
 
 
 
@@ -90,6 +99,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAddressRequested = false;
+        mAddressOutput = "";
+        updateValuesFromBundle(savedInstanceState);
 
         REFRESH_RATE = 100;
         kellotettu = false;
@@ -114,8 +127,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.kellotus_layout, container, false);
+
+
         textView = (TextView) view.findViewById(R.id.timeview);
         textView2 = (TextView) view.findViewById(R.id.angleview);
         textView3 = (TextView) view.findViewById(R.id.dataview);
@@ -132,8 +148,50 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             e.printStackTrace();
         }
 
+        mResultReceiver = new AddressResultReceiver(new Handler());
+
+        // Set defaults, then update using values stored in the Bundle.
+        mAddressRequested = false;
+        mAddressOutput = "";
+        updateValuesFromBundle(savedInstanceState);
         buildGoogleApiClient();
         return view;
+    }
+
+    /**
+     * Updates fields based on data stored in the bundle.
+     */
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            // Check savedInstanceState to see if the address was previously requested.
+            if (savedInstanceState.keySet().contains(ADDRESS_REQUESTED_KEY)) {
+                mAddressRequested = savedInstanceState.getBoolean(ADDRESS_REQUESTED_KEY);
+                System.out.println("Adress not found!!");
+            }
+            // Check savedInstanceState to see if the location address string was previously found
+            // and stored in the Bundle. If it was found, display the address string in the UI.
+            if (savedInstanceState.keySet().contains(LOCATION_ADDRESS_KEY)) {
+                mAddressOutput = savedInstanceState.getString(LOCATION_ADDRESS_KEY);
+                System.out.println("Bundle Update: " + savedInstanceState.keySet().contains(LOCATION_ADDRESS_KEY));
+                //displayAddressOutput();
+            }
+        }
+    }
+
+    protected void startIntentService() {
+        // Create an intent for passing to the intent service responsible for fetching the address.
+        Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
+
+        // Pass the result receiver as an extra to the service.
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+
+        // Pass the location data as an extra to the service.
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
+
+        // Start the service. If the service isn't already running, it is instantiated and started
+        // (creating a process for it if needed); if it is running then it remains running. The
+        // service kills itself automatically once all intents are processed.
+        getActivity().startService(intent);
     }
 
     @Override
@@ -182,6 +240,19 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         // in rare cases when a location is not available.
         loc = LocationServices.FusedLocationApi.getLastLocation(gac);
         if (loc != null) {
+            // Determine whether a Geocoder is available.
+            if (!Geocoder.isPresent()) {
+                Toast.makeText(getContext(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
+                return;
+            }
+            // It is possible that the user presses the button to get the address before the
+            // GoogleApiClient object successfully connects. In such a case, mAddressRequested
+            // is set to true, but no attempt is made to fetch the address (see
+            // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
+            // user has requested an address, since we now have a connection to GoogleApiClient.
+            if (mAddressRequested) {
+                startIntentService();
+            }
             System.out.println(String.format("%s: %f", mLatitudeLabel, loc.getLatitude()));
             System.out.println("Latitude: " + loc.getLatitude());
             System.out.println(String.format("%s: %f", mLongitudeLabel, loc.getLongitude()));
@@ -245,6 +316,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         view.findViewById(R.id.readybtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (gac.isConnected() && loc != null) {
+                    startIntentService();
+                }
+                mAddressRequested = true;
                 resultDone = false;
                 kellotettu = false;
                 loppu = false;
@@ -318,6 +393,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             dbtime = elapsedTime/1000.0;
             kellotustime = elapsedTime/1000;
             textView.setText("" + elapsedTime / 1000.0);
+            displayAddressOutput();
+            System.out.println("OSOITE: " + mAddressOutput);
 
 
 
@@ -333,9 +410,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             if (i<0) i=0;
             else if (i>180) i=180;
             textView2.setText("" + i);
-            textView3.setText(kellotusData);
-
-
+            //textView3.setText(kellotusData);
 
 
         }
@@ -343,4 +418,51 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
     private final Handler mHandler = new Handler();
     private final Handler mHandler2 = new Handler();
+
+
+    @SuppressLint("ParcelCreator")
+    class AddressResultReceiver extends ResultReceiver {
+
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        /**
+         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+         */
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            //displayAddressOutput();
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                showToast(getString(R.string.address_found));
+            }
+
+            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+            mAddressRequested = false;
+        }
+    }
+
+    protected void displayAddressOutput() {
+        textView3.setText(mAddressOutput);
+    }
+
+    protected void showToast(String text) {
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save whether the address has been requested.
+        savedInstanceState.putBoolean(ADDRESS_REQUESTED_KEY, mAddressRequested);
+
+        // Save the address string.
+        savedInstanceState.putString(LOCATION_ADDRESS_KEY, mAddressOutput);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 }

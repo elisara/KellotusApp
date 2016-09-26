@@ -24,6 +24,10 @@
         android:theme="@style/AppTheme">
 
         <service android:name="com.mbientlab.metawear.MetaWearBleService" />
+        <service
+            android:name="com.example.elisarajaniemi.kellotusapp.FetchAddressIntentService"
+            android:exported="false"
+            android:enabled="true"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
