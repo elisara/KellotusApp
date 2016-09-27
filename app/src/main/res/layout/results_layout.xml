@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapview2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1" />
+
     <LinearLayout
+        android:padding="16dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:paddingBottom="10dp"
@@ -29,8 +35,11 @@
     </LinearLayout>
 
     <ListView
+        android:layout_weight="1"
         android:id="@+id/resultview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
+
+
 
 </LinearLayout>

@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingBottom="30dp">
@@ -49,16 +49,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="15dp" />
-
-
     </LinearLayout>
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="250dp"
-        android:layout_alignParentBottom="true"
-        android:layout_weight="1" />
-
 
 </RelativeLayout>

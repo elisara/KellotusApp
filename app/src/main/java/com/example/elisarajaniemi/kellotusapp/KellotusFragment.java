@@ -73,8 +73,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private StringBuilder strBuild;
     private String kellotusData;
 
-    private MapView mapView;
-    private GoogleMap map;
+   // private MapView mapView;
+    //private GoogleMap map;
     private GoogleApiClient gac;
     private Location loc;
     protected String mLatitudeLabel;
@@ -104,6 +104,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         mAddressOutput = "";
         updateValuesFromBundle(savedInstanceState);
 
+        //for counting
         REFRESH_RATE = 100;
         kellotettu = false;
         loppu = false;
@@ -136,6 +137,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         textView2 = (TextView) view.findViewById(R.id.angleview);
         textView3 = (TextView) view.findViewById(R.id.dataview);
 
+        /**
         mapView = (MapView) view.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
         map = mapView.getMap();
@@ -147,7 +149,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        */
         mResultReceiver = new AddressResultReceiver(new Handler());
 
         // Set defaults, then update using values stored in the Bundle.
@@ -194,26 +196,28 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         getActivity().startService(intent);
     }
 
+    /**
     @Override
     public void onResume() {
         mapView.onResume();
         super.onResume();
     }
+     */
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+       // mapView.onDestroy();
         getActivity().getApplicationContext().unbindService(this);
     }
-
+/**
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
-
+*/
     public void onStart() {
         gac.connect();
         super.onStart();
@@ -261,8 +265,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             System.out.println("No location detected");
         }
 
+        /**
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
         map.animateCamera(cameraUpdate);
+         */
     }
 
     @Override
