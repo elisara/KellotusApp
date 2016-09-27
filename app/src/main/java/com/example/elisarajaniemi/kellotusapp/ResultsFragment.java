@@ -18,6 +18,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +39,8 @@ public class ResultsFragment extends Fragment {
     private TextView countView;
     private int count;
     private TextView avegareView;
+    private int i;
+    private LatLng latLng;
 
 
     @Override
@@ -50,6 +54,8 @@ public class ResultsFragment extends Fragment {
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.setMyLocationEnabled(true);
 
+        i = 0;
+
         try {
             MapsInitializer.initialize(this.getActivity());
         } catch (Exception e) {
@@ -58,7 +64,6 @@ public class ResultsFragment extends Fragment {
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(60.21, 24.81), 13);
         map.animateCamera(cameraUpdate);
-
 
         listview = (ListView) view.findViewById(R.id.resultview);
         rdbh = new ResultsDBHelper(getContext());
@@ -72,6 +77,30 @@ public class ResultsFragment extends Fragment {
 
         avegareView = (TextView) view.findViewById(R.id.average);
         avegareView.setText("Average: "+rdbh.getAverage());
+
+        // Add markers to map
+        try {
+            while (i < rdbh.getResults().size() - 1) {
+                latLng = new LatLng(rdbh.getResults().get(i).latitude, rdbh.getResults().get(i).longitude);
+                System.out.println("Latitude & Longitude: " + latLng);
+                Marker mapMarker = map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(rdbh.getResults().get(i).address)
+                        .snippet(Double.toString(rdbh.getResults().get(i).kellotusTime)));
+                i++;
+
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+        Marker mapMarker = map.addMarker(new MarkerOptions()
+                .position(new LatLng(10, 10))
+                .title("Muumimaailma"));
+
+        Marker mapMarker2 = map.addMarker(new MarkerOptions()
+                .position(new LatLng(10.01, 10.01))
+                .title("Muumimaailma 2"));
 
         return view;
     }

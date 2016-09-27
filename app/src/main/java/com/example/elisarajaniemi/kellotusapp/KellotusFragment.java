@@ -372,7 +372,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                                     mHandler.removeCallbacks(startTimer);
                                     int date = (int)endTime % Integer.MAX_VALUE;
                                     if (resultDone == false) {
-                                        rdbh.insertResults("uusosote", dbtime, kellotustime, date, "comment", "name");
+                                        rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, "comment", "name", loc.getLatitude(), loc.getLongitude());
                                         resultDone = true;
                                     }
                                 }
@@ -399,7 +399,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             dbtime = elapsedTime/1000.0;
             kellotustime = elapsedTime/1000;
             textView.setText("" + elapsedTime / 1000.0);
-            displayAddressOutput();
+            //displayAddressOutput();
             System.out.println("OSOITE: " + mAddressOutput);
 
 
@@ -442,10 +442,14 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
             //displayAddressOutput();
+            System.out.println("RESULTCODE:::::" +resultCode);
 
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
                 showToast(getString(R.string.address_found));
+            }
+            if(resultCode ==1){
+                mAddressOutput = "Kellotettu";
             }
 
             // Reset. Enable the Fetch Address button and stop showing the progress bar.
@@ -453,9 +457,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         }
     }
 
-    protected void displayAddressOutput() {
+    /**protected void displayAddressOutput() {
         textView3.setText(mAddressOutput);
-    }
+
+    }*/
 
     protected void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();

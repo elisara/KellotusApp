@@ -27,7 +27,8 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS results(id INTEGER PRIMARY KEY AUTOINCREMENT, address VARCHAR, time DOUBLE, kellotustime DOUBLE, date INT, comment VARCHAR, name VARCHAR);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS results(id INTEGER PRIMARY KEY AUTOINCREMENT, address VARCHAR, " +
+                "time DOUBLE, kellotustime DOUBLE, date INT, comment VARCHAR, name VARCHAR, latitude DOUBLE, longitude DOUBLE);");
         //values.clear();
 
     }
@@ -38,7 +39,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertResults (String address, double time, double kellotustime, int date, String comment, String name) {
+    public boolean insertResults (String address, double time, double kellotustime, int date, String comment, String name, double latitude, double longitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("address", address);
@@ -47,6 +48,8 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         contentValues.put("date", date);
         contentValues.put("comment", comment);
         contentValues.put("name", name);
+        contentValues.put("latitude", latitude);
+        contentValues.put("longitude", longitude);
 
         db.insert("results", null, contentValues);
         return true;
@@ -64,7 +67,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
 
             ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
                     c.getDouble(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
-                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")));
+                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
 
             resultList.add(0,ri);
             c.moveToNext();

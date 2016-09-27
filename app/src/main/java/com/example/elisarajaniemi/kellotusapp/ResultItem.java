@@ -15,15 +15,19 @@ public class ResultItem {
     public String comment;
     public String name;
     public int date;
+    public double latitude;
+    public double longitude;
 
 
-    public ResultItem(String address, double time, double kellotusTime, String comment, String name, int date){
+    public ResultItem(String address, double time, double kellotusTime, String comment, String name, int date, double latitude, double longitude){
         this.address = address;
         this.time = time;
         this.kellotusTime = kellotusTime;
         this.comment = comment;
         this.name = name;
         this.date = date;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
 
