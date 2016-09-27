@@ -72,6 +72,24 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         return resultList;
     }
 
+    public double getAverage(){
+        double time = 0;
+        double average = 0;
+        int i = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c =  db.rawQuery( "select * from results", null );
+        c.moveToFirst();
+
+        while(c.isAfterLast() == false){
+            time = time + c.getDouble(c.getColumnIndex("time"));
+            i++;
+            c.moveToNext();
+        }
+
+        average = time/i;
+        return average;
+
+    }
 
 
 }

@@ -34,6 +34,9 @@ public class ResultsFragment extends Fragment {
     private MyArrayAdapter adapter;
     private MapView mapView;
     private GoogleMap map;
+    private TextView countView;
+    private int count;
+    private TextView avegareView;
 
 
     @Override
@@ -53,16 +56,22 @@ public class ResultsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(60, 24), 13);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(60.21, 24.81), 13);
         map.animateCamera(cameraUpdate);
+
 
         listview = (ListView) view.findViewById(R.id.resultview);
         rdbh = new ResultsDBHelper(getContext());
         resultlist = rdbh.getResults();
         adapter = new MyArrayAdapter(getContext(),resultlist);
-
-        //ArrayAdapter<ResultItem> arrayAdapter = new ArrayAdapter<ResultItem>(getActivity().getApplicationContext(), R.layout.my_list_item,R.id.addressview, resultlist);
         listview.setAdapter(adapter);
+
+        count = resultlist.size();
+        countView = (TextView) view.findViewById(R.id.times);
+        countView.setText("Kellotettu: "+count+" times");
+
+        avegareView = (TextView) view.findViewById(R.id.average);
+        avegareView.setText("Average: "+rdbh.getAverage());
 
         return view;
     }
