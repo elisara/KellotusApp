@@ -13,8 +13,11 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -33,6 +36,10 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
     Button mapButton, resultsButton;
     ResultsFragment results;
     KellotusFragment kellotus;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    PagerAdapter adapter;
+    private static final int NUM_PAGES = 2;
 
     public static class ReconnectDialogFragment extends DialogFragment implements  ServiceConnection {
         private static final String KEY_BLUETOOTH_DEVICE = "com.example.elisarajaniemi.kellotusapp.ConnectDeviceActivity.ReconnectDialogFragment.KEY_BLUETOOTH_DEVICE";
@@ -128,7 +135,14 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         btDevice= getIntent().getParcelableExtra(EXTRA_BT_DEVICE);
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
 
-        results = new ResultsFragment();
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        adapter = new PagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        /*results = new ResultsFragment();
         kellotus = new KellotusFragment();
 
         mapButton = (Button) findViewById(R.id.mapbtn);
@@ -142,7 +156,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
             public void onClick(View v) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, results).commit();
             }
-        });
+        });*/
 
     }
 
@@ -177,7 +191,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
     public void onServiceConnected(ComponentName name, IBinder service) {
         mwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(btDevice);
         mwBoard.setConnectionStateHandler(connectionHandler);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, kellotus).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, kellotus).commit();
     }
 
     @Override

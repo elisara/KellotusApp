@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private boolean aloitettu;
     private StringBuilder strBuild;
     private String kellotusData;
+    private Button sendBtn;
 
    // private MapView mapView;
     //private GoogleMap map;
@@ -132,10 +134,22 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.kellotus_layout, container, false);
 
-
         textView = (TextView) view.findViewById(R.id.timeview);
         textView2 = (TextView) view.findViewById(R.id.angleview);
         textView3 = (TextView) view.findViewById(R.id.dataview);
+
+        sendBtn = (Button) view.findViewById(R.id.sendBtn);
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, rdbh.getResults().get(0).address.toString() + " " + Double.toString(rdbh.getResults().get(0).kellotusTime));
+                sendIntent.setType("text/plain");
+                //sendIntent.setPackage("com.whatsapp");
+                startActivity(sendIntent);
+            }
+        });
 
         /**
         mapView = (MapView) view.findViewById(R.id.mapview);
@@ -157,6 +171,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         mAddressOutput = "";
         updateValuesFromBundle(savedInstanceState);
         buildGoogleApiClient();
+
         return view;
     }
 

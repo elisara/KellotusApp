@@ -1,14 +1,10 @@
 package com.example.elisarajaniemi.kellotusapp;
 
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,8 +18,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
@@ -38,7 +32,7 @@ public class ResultsFragment extends Fragment {
     private GoogleMap map;
     private TextView countView;
     private int count;
-    private TextView avegareView;
+    private TextView averageView;
     private int i;
     private LatLng latLng;
 
@@ -62,8 +56,6 @@ public class ResultsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(60.21, 24.81), 13);
-        map.animateCamera(cameraUpdate);
 
         listview = (ListView) view.findViewById(R.id.resultview);
         rdbh = new ResultsDBHelper(getContext());
@@ -71,12 +63,22 @@ public class ResultsFragment extends Fragment {
         adapter = new MyArrayAdapter(getContext(),resultlist);
         listview.setAdapter(adapter);
 
+        if(rdbh.getResults().size() != 0) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(0).latitude, rdbh.getResults().get(0).longitude), 13);
+            map.animateCamera(cameraUpdate);
+        }
+        else{
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 13);
+            map.animateCamera(cameraUpdate);
+
+        }
+
         count = resultlist.size();
         countView = (TextView) view.findViewById(R.id.times);
         countView.setText("Kellotettu: "+count+" times");
 
-        avegareView = (TextView) view.findViewById(R.id.average);
-        avegareView.setText("Average: "+rdbh.getAverage());
+        averageView = (TextView) view.findViewById(R.id.average);
+        averageView.setText("Average: "+Math.round(rdbh.getAverage()*100.0) / 100.0);
 
         // Add markers to map
         try {
