@@ -2,9 +2,12 @@ package com.example.elisarajaniemi.kellotusapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,11 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,7 +38,9 @@ import static android.view.View.VISIBLE;
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
  */
-public class ResultsFragment extends Fragment {
+public class ResultsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+
+    protected static final String TAG = "ResultFragment";
 
     private ListView listview;
     private ArrayList resultlist;
@@ -44,6 +53,11 @@ public class ResultsFragment extends Fragment {
     private TextView averageView;
     private int i;
     private LatLng latLng;
+
+    private GoogleApiClient gac;
+    private Location loc;
+    protected String mLatitudeLabel;
+    protected String mLongitudeLabel;
 
 
 
@@ -102,19 +116,6 @@ public class ResultsFragment extends Fragment {
             }
         });
 
-
-
-
-        if(rdbh.getResults().size() != 0) {
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(0).latitude, rdbh.getResults().get(0).longitude), 13);
-            map.animateCamera(cameraUpdate);
-        }
-        else{
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 13);
-            map.animateCamera(cameraUpdate);
-
-        }
-
         count = resultlist.size();
         countView = (TextView) view.findViewById(R.id.times);
         countView.setText("KELLOTETTU: "+count+" times");
@@ -139,18 +140,17 @@ public class ResultsFragment extends Fragment {
             System.out.println(e);
         }
 
-        Marker mapMarker = map.addMarker(new MarkerOptions()
-                .position(new LatLng(10, 10))
-                .title("Muumimaailma"));
-
-        Marker mapMarker2 = map.addMarker(new MarkerOptions()
-                .position(new LatLng(10.01, 10.01))
-                .title("Muumimaailma 2"));
-
+        buildGoogleApiClient();
         return view;
     }
 
-
+    protected synchronized void buildGoogleApiClient() {
+        gac = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
 
     @Override
     public void onResume() {
@@ -169,6 +169,43 @@ public class ResultsFragment extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+    public void onStart() {
+        gac.connect();
+        super.onStart();
+    }
+
+    public void onStop() {
+        gac.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+          loc = LocationServices.FusedLocationApi.getLastLocation(gac);
+        if(loc !=null) {
+            System.out.println(String.format("%s: %f", mLatitudeLabel, loc.getLatitude()));
+            System.out.println("Latitude: " + loc.getLatitude());
+            System.out.println(String.format("%s: %f", mLongitudeLabel, loc.getLongitude()));
+            System.out.println("Longitude: " + loc.getLongitude());
+        }
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
+        map.animateCamera(cameraUpdate);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
+        // onConnectionFailed.
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection to Google Play services was lost for some reason. We call connect() to
+        // attempt to re-establish the connection.
+        Log.i(TAG, "Connection suspended");
+        gac.connect();
     }
 
 

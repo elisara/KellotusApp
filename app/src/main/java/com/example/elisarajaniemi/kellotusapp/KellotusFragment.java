@@ -78,7 +78,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private boolean aloitettu;
     private StringBuilder strBuild;
     private Button readyBtn;
-    private Button sendBtn;
     private Button submitBtn;
     private GoogleApiClient gac;
     private Location loc;
@@ -138,7 +137,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         textView2 = (TextView) view.findViewById(R.id.angleview);
         readyBtn = (Button) view.findViewById(R.id.readyBtn);
         submitBtn = (Button) view.findViewById(R.id.submitBtn);
-        sendBtn = (Button) view.findViewById(R.id.sendBtn);
         editName = (EditText) view.findViewById(R.id.edit_name);
         editComment = (EditText) view.findViewById(R.id.edit_comment);
 
@@ -147,32 +145,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         submitBtn.setVisibility(View.GONE);
 
 
-        sendBtn.setVisibility(View.GONE);
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, rdbh.getResults().get(0).address.toString() + " " + Double.toString(rdbh.getResults().get(0).kellotusTime));
-                sendIntent.setType("text/plain");
-                //sendIntent.setPackage("com.whatsapp");
-                startActivity(sendIntent);
-            }
-        });
-
-        /**
-         mapView = (MapView) view.findViewById(R.id.mapview);
-         mapView.onCreate(savedInstanceState);
-         map = mapView.getMap();
-         map.getUiSettings().setMyLocationButtonEnabled(false);
-         map.setMyLocationEnabled(true);
-
-         try {
-         MapsInitializer.initialize(this.getActivity());
-         } catch (Exception e) {
-         e.printStackTrace();
-         }
-         */
         mResultReceiver = new AddressResultReceiver(new Handler());
 
         // Set defaults, then update using values stored in the Bundle.
@@ -220,12 +192,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         getActivity().startService(intent);
     }
 
-    /**
-     * @Override public void onResume() {
-     * mapView.onResume();
-     * super.onResume();
-     * }
-     */
 
     @Override
     public void onDestroy() {
@@ -234,12 +200,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         getActivity().getApplicationContext().unbindService(this);
     }
 
-    /**
-     * @Override public void onLowMemory() {
-     * super.onLowMemory();
-     * mapView.onLowMemory();
-     * }
-     */
     public void onStart() {
         gac.connect();
         super.onStart();
