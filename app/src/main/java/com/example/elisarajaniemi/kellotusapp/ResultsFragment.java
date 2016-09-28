@@ -78,15 +78,31 @@ public class ResultsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
                 // TODO Auto-generated method stub
-               /** System.out.println("Position: "+position+ " Row ID: "+rowId);
+                System.out.println("Position: "+position+ " Row ID: "+rowId);
                 Object obj = listview.getAdapter().getItem(position);
                 ResultItem ri = (ResultItem)obj;
                 System.out.println("Time: " + ri.time);
-*/
 
             }
 
         });
+
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> av, View v, int position, long rowId) {
+                Intent sendIntent = new Intent();
+                Object obj = listview.getAdapter().getItem(position);
+                ResultItem ri = (ResultItem)obj;
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + "\nAika: " + ri.time + "\nKellotusaika: "+ ri.kellotusTime +"\n" + ri.comment + "\n" + ri.address);
+                sendIntent.setType("text/plain");
+                //sendIntent.setPackage("com.whatsapp");
+                startActivity(sendIntent);
+                return true;
+            }
+        });
+
+
 
 
         if(rdbh.getResults().size() != 0) {
@@ -101,10 +117,10 @@ public class ResultsFragment extends Fragment {
 
         count = resultlist.size();
         countView = (TextView) view.findViewById(R.id.times);
-        countView.setText("Kellotettu: "+count+" times");
+        countView.setText("KELLOTETTU: "+count+" times");
 
         averageView = (TextView) view.findViewById(R.id.average);
-        averageView.setText("Average: "+Math.round(rdbh.getAverage()*100.0) / 100.0);
+        averageView.setText("AVERAGE:        "+(Math.round(rdbh.getAverage()*100.0) / 100.0) +"s");
 
 
         // Add markers to map

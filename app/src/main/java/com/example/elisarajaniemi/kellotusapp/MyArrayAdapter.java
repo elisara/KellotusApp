@@ -44,8 +44,8 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
 
         // Populate the data into the template view using the data object
         tvName.setText(ri.name);
-        timeView.setText(""+ri.time);
-        kellotusView.setText(""+ri.kellotusTime);
+        timeView.setText(ri.time+"s");
+        kellotusView.setText(ri.kellotusTime+"ks");
         commentView.setText(ri.comment);
 
         // Return the completed view to render on screen

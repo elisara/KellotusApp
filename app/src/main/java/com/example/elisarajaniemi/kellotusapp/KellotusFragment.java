@@ -47,7 +47,7 @@ import java.util.ArrayList;
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
  */
-public class KellotusFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,ServiceConnection {
+public class KellotusFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ServiceConnection {
 
     public interface FragmentSettings {
         BluetoothDevice getBtDevice();
@@ -55,18 +55,18 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
     protected static final String TAG = "MainActivity";
 
-    private MetaWearBoard mwBoard= null;
+    private MetaWearBoard mwBoard = null;
     private FragmentSettings settings;
     private Accelerometer accModule;
     TextView textView;
     TextView textView2;
-
     EditText editName;
     EditText editComment;
     Boolean showEditFields;
-
     private String message;
     private String rawData;
+    private String name;
+    private String comment;
     private int REFRESH_RATE;
     private double d;
     private long startTime;
@@ -77,7 +77,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private boolean loppu;
     private boolean aloitettu;
     private StringBuilder strBuild;
-    private String kellotusData;
     private Button readyBtn;
     private Button sendBtn;
     private Button submitBtn;
@@ -86,7 +85,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected String mLatitudeLabel;
     protected String mLongitudeLabel;
     private DecimalFormatSymbols df;
-    private ArrayList resultList;
     private ResultsDBHelper rdbh;
     private boolean resultDone;
     private double dbtime;
@@ -98,10 +96,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private AddressResultReceiver mResultReceiver;
 
 
-
-    public KellotusFragment(){
+    public KellotusFragment() {
     }
-
 
 
     @Override
@@ -109,12 +105,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         updateValuesFromBundle(savedInstanceState);
-        Activity owner= getActivity();
+        Activity owner = getActivity();
         if (!(owner instanceof FragmentSettings)) {
             throw new ClassCastException("Owning activity must implement the FragmentSettings interface");
         }
 
-        settings= (FragmentSettings) owner;
+        settings = (FragmentSettings) owner;
         owner.getApplicationContext().bindService(new Intent(owner, MetaWearBleService.class), this, Context.BIND_AUTO_CREATE);
         /**
          * Instantiate variables
@@ -131,7 +127,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         REFRESH_RATE = 100;
         d = 0;
         strBuild = new StringBuilder();
-        kellotusData = "";
+
         rdbh = new ResultsDBHelper(getContext());
 
         View view = inflater.inflate(R.layout.kellotus_layout, container, false);
@@ -143,13 +139,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         readyBtn = (Button) view.findViewById(R.id.readyBtn);
         submitBtn = (Button) view.findViewById(R.id.submitBtn);
         sendBtn = (Button) view.findViewById(R.id.sendBtn);
-        editName = (EditText) view.findViewById(R.id.edit_name) ;
-        editComment = (EditText) view.findViewById(R.id.edit_comment) ;
+        editName = (EditText) view.findViewById(R.id.edit_name);
+        editComment = (EditText) view.findViewById(R.id.edit_comment);
 
         editName.setVisibility(View.GONE);
         editComment.setVisibility(View.GONE);
         submitBtn.setVisibility(View.GONE);
-
 
 
         sendBtn.setVisibility(View.GONE);
@@ -226,11 +221,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     }
 
     /**
-     @Override
-     public void onResume() {
-     mapView.onResume();
-     super.onResume();
-     }
+     * @Override public void onResume() {
+     * mapView.onResume();
+     * super.onResume();
+     * }
      */
 
     @Override
@@ -239,13 +233,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         // mapView.onDestroy();
         getActivity().getApplicationContext().unbindService(this);
     }
-    /**
-     @Override
-     public void onLowMemory() {
-     super.onLowMemory();
-     mapView.onLowMemory();
-     }
 
+    /**
+     * @Override public void onLowMemory() {
+     * super.onLowMemory();
+     * mapView.onLowMemory();
+     * }
      */
     public void onStart() {
         gac.connect();
@@ -317,7 +310,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(settings.getBtDevice());
+        mwBoard = ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(settings.getBtDevice());
         ready();
     }
 
@@ -329,7 +322,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     /**
      * Called when the app has reconnected to the board
      */
-    public void reconnected() { }
+    public void reconnected() {
+    }
 
     /**
      * Called when the mwBoard field is ready to be used
@@ -354,12 +348,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 if (gac.isConnected() && loc != null) {
                     startIntentService();
                 }
-                mAddressRequested = true;
-                resultDone = false;
-                kellotettu = false;
-                loppu = false;
-                aloitettu = false;
-                textView.setText("");
+
                 accModule.routeData().fromAxes().stream("acc_stream").commit()
                         .onComplete(new AsyncOperation.CompletionHandler<RouteManager>() {
                             @Override
@@ -374,42 +363,35 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                                         d = Double.parseDouble(message);
                                         d = (d + 1.03) * 90;
 
-                                        //Log.i("tutorial", msg.getData(CartesianFloat.class).toString());
+
                                         mHandler2.removeCallbacks(angle);
                                         mHandler2.postDelayed(angle, 0);
-                                        strBuild.append(rawData + "\n");
-                                        if(d >= 50 && aloitettu == false && kellotettu == false){
+
+                                        if (d >= 40 && aloitettu == false && kellotettu == false) {
                                             aloitettu = true;
                                             startTime = System.currentTimeMillis();
-                                            //Log.i("Timestamp start ", startTime.toString());
-                                            //mHandler.post(mUpdateUITimerTask);
                                             mHandler.removeCallbacks(startTimer);
                                             mHandler.postDelayed(startTimer, 0);
 
 
-
                                         }
-                                        if(d > 100){
+                                        if (d > 100) {
                                             kellotettu = true;
                                         }
-                                        if(d < 90 && kellotettu == true && loppu == false){
+                                        if (d < 90 && kellotettu == true && loppu == false) {
                                             loppu = true;
                                             endTime = System.currentTimeMillis();
                                             //Log.i("Timestamp end ", endTime.toString());
                                             Log.i("Result ", String.valueOf(timeResult));
-                                            kellotusData = strBuild.toString();
                                             showEditFields = true;
 
 
                                         }
-                                        if(kellotettu == true && aloitettu == true && loppu == true){
+                                        if (kellotettu == true && aloitettu == true && loppu == true) {
 
                                             mHandler.removeCallbacks(startTimer);
-                                            int date = (int)endTime % Integer.MAX_VALUE;
-                                            if (resultDone == false) {
-                                                rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, "comment", "name", loc.getLatitude(), loc.getLongitude());
-                                                resultDone = true;
-                                            }
+
+
                                         }
 
                                     }
@@ -420,7 +402,34 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                         });
             }
         });
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                name = "Anonymous";
+                comment = "";
+                if (!editName.getText().toString().isEmpty()) name = editName.getText().toString();
+                if (!editComment.getText().toString().isEmpty()) comment = editComment.getText().toString();
 
+
+                int date = (int) endTime % Integer.MAX_VALUE;
+                rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, comment, name, loc.getLatitude(), loc.getLongitude());
+                showToast("Saved successfully");
+
+                mAddressRequested = true;
+
+                kellotettu = false;
+                loppu = false;
+                aloitettu = false;
+                showEditFields = false;
+                textView.setText("");
+                editName.setVisibility(View.GONE);
+                editComment.setVisibility(View.GONE);
+                readyBtn.setVisibility(View.VISIBLE);
+                submitBtn.setVisibility(View.GONE);
+
+
+            }
+        });
     }
 
 
@@ -429,15 +438,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         public void run() {
 
             elapsedTime = (System.currentTimeMillis() - startTime);
-            //timeResult = (endTime - startTime) / 1000.0;
             mHandler.postDelayed(this, REFRESH_RATE);
-            dbtime = elapsedTime/1000.0;
-            kellotustime = elapsedTime/1000;
+            dbtime = elapsedTime / 1000.0;
+            kellotustime = elapsedTime / 1000;
             textView.setText("" + elapsedTime / 1000.0);
-            //displayAddressOutput();
+
             System.out.println("OSOITE: " + mAddressOutput);
-
-
 
 
         }
@@ -449,10 +455,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
             Long l = Math.round(d);
             int i = Integer.valueOf(l.intValue());
-            if (i<0) i=0;
-            else if (i>180) i=180;
+            if (i < 0) i = 0;
+            else if (i > 180) i = 180;
             textView2.setText("" + i);
-            if(showEditFields) {
+            if (showEditFields) {
                 editName.setVisibility(View.VISIBLE);
                 editComment.setVisibility(View.VISIBLE);
                 readyBtn.setVisibility(View.GONE);
@@ -475,7 +481,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         }
 
         /**
-         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+         * Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
          */
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -483,13 +489,13 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
             //displayAddressOutput();
-            System.out.println("RESULTCODE:::::" +resultCode);
+            System.out.println("RESULTCODE:::::" + resultCode);
 
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
-                showToast(getString(R.string.address_found));
+                //showToast(getString(R.string.address_found));
             }
-            if(resultCode ==1){
+            if (resultCode == 1) {
                 mAddressOutput = "Kellotettu";
             }
 
@@ -498,10 +504,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         }
     }
 
-    /**protected void displayAddressOutput() {
-     textView3.setText(mAddressOutput);
-
-     }*/
+    /**
+     * protected void displayAddressOutput() {
+     * textView3.setText(mAddressOutput);
+     * <p>
+     * }
+     */
 
     protected void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
@@ -518,3 +526,4 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     }
 
 }
+
