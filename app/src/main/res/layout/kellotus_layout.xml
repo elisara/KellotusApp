@@ -11,47 +11,56 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="30dp">
-        
+        android:paddingBottom="30dp"
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="30dp"
+            android:weightSum="1"
+            android:layout_weight="0.42">
+
+            <TextView
+                android:id="@+id/timeview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textSize="50dp"
+                android:textColor="#212121"/>
+            <TextView
+                android:id="@+id/angleview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:textSize="30dp" />
+        </LinearLayout>
+        <EditText android:id="@+id/edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="name"
+            />
+        <EditText android:id="@+id/edit_comment"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="commmet"
+            />
         <Button
             android:id="@+id/sendBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Share to Whatsapp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="30dp"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/timeview"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:textSize="30dp" />
-            <TextView
-                android:id="@+id/angleview"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:textSize="30dp" />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/dataview"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="15dp" />
         <Button
             android:id="@+id/readybtn"
             android:layout_width="300dp"
-            android:layout_height="90dp"
+            android:layout_height="100dp"
             android:shadowColor="#A8A8A8"
             android:background="@drawable/buttonshape"
             android:text="I'm ready"
@@ -60,7 +69,7 @@
             android:layout_alignParentTop="true"
             android:shadowDx="5"
             android:shadowDy="5"
-            android:shadowRadius="30"/>
+            android:shadowRadius="25" />
     </LinearLayout>
 
 </RelativeLayout>

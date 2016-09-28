@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private Accelerometer accModule;
     TextView textView;
     TextView textView2;
-    TextView textView3;
     private String message;
     private String rawData;
     private int REFRESH_RATE;
@@ -92,6 +92,9 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected String mAddressOutput;
     protected boolean mAddressRequested;
     private AddressResultReceiver mResultReceiver;
+    private EditText editName;
+    private EditText editComment;
+    private Boolean showEditFields;
 
 
 
@@ -105,6 +108,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         mAddressRequested = false;
         mAddressOutput = "";
         updateValuesFromBundle(savedInstanceState);
+
+        showEditFields = false;
 
         //for counting
         REFRESH_RATE = 100;
@@ -136,7 +141,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
         textView = (TextView) view.findViewById(R.id.timeview);
         textView2 = (TextView) view.findViewById(R.id.angleview);
-        textView3 = (TextView) view.findViewById(R.id.dataview);
 
         sendBtn = (Button) view.findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +154,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 startActivity(sendIntent);
             }
         });
+
+        editName = (EditText) view.findViewById(R.id.edit_name) ;
+        editComment = (EditText) view.findViewById(R.id.edit_comment) ;
+        editName.setVisibility(View.GONE);
+        editComment.setVisibility(View.GONE);
 
         /**
         mapView = (MapView) view.findViewById(R.id.mapview);
@@ -382,6 +391,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                                     //Log.i("Timestamp end ", endTime.toString());
                                     Log.i("Result ", String.valueOf(timeResult));
                                     kellotusData = strBuild.toString();
+                                    showEditFields = true;
                                 }
                                 if(kellotettu == true && aloitettu == true && loppu == true){
                                     mHandler.removeCallbacks(startTimer);
@@ -431,7 +441,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             if (i<0) i=0;
             else if (i>180) i=180;
             textView2.setText("" + i);
-            //textView3.setText(kellotusData);
+
+            if(showEditFields) {
+                editName.setVisibility(View.VISIBLE);
+                editComment.setVisibility(View.VISIBLE);
+            }
 
 
         }

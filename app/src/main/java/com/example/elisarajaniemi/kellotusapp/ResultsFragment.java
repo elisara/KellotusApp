@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,6 +20,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
@@ -35,12 +40,14 @@ public class ResultsFragment extends Fragment {
     private TextView averageView;
     private int i;
     private LatLng latLng;
+   
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.results_layout, container, false);
+
 
         mapView = (MapView) view.findViewById(R.id.mapview2);
         mapView.onCreate(savedInstanceState);
@@ -62,6 +69,21 @@ public class ResultsFragment extends Fragment {
         resultlist = rdbh.getResults();
         adapter = new MyArrayAdapter(getContext(),resultlist);
         listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
+                // TODO Auto-generated method stub
+                System.out.println("Position: "+position+ " Row ID: "+rowId);
+                Object obj = listview.getAdapter().getItem(position);
+                ResultItem ri = (ResultItem)obj;
+                System.out.println("Time: " + ri.time);
+
+
+            }
+
+        });
+
 
         if(rdbh.getResults().size() != 0) {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(0).latitude, rdbh.getResults().get(0).longitude), 13);
@@ -79,6 +101,7 @@ public class ResultsFragment extends Fragment {
 
         averageView = (TextView) view.findViewById(R.id.average);
         averageView.setText("Average: "+Math.round(rdbh.getAverage()*100.0) / 100.0);
+
 
         // Add markers to map
         try {
@@ -106,6 +129,8 @@ public class ResultsFragment extends Fragment {
 
         return view;
     }
+
+
 
     @Override
     public void onResume() {
