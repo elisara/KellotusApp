@@ -9,21 +9,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="30dp"
-        android:weightSum="1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:weightSum="2">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
             android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="30dp"
-            android:weightSum="1"
-            android:layout_weight="0.42">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/timeview"
@@ -31,8 +29,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:textSize="50dp"
-                android:textColor="#212121"/>
+                android:textColor="#212121"
+                android:textSize="50dp" />
+
             <TextView
                 android:id="@+id/angleview"
                 android:layout_width="match_parent"
@@ -41,35 +40,80 @@
                 android:gravity="center"
                 android:textSize="30dp" />
         </LinearLayout>
-        <EditText android:id="@+id/edit_name"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:hint="name"
-            />
-        <EditText android:id="@+id/edit_comment"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:hint="commmet"
-            />
-        <Button
-            android:id="@+id/sendBtn"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Share to Whatsapp"/>
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.1">
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.8">
 
-        <Button
-            android:id="@+id/readybtn"
-            android:layout_width="300dp"
-            android:layout_height="100dp"
-            android:shadowColor="#A8A8A8"
-            android:background="@drawable/buttonshape"
-            android:text="I'm ready"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp"
-            android:layout_alignParentTop="true"
-            android:shadowDx="5"
-            android:shadowDy="5"
-            android:shadowRadius="25" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingBottom="30dp"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/edit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="name" />
+
+                    <EditText
+                        android:id="@+id/edit_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="comment"
+                        android:layout_marginBottom="20dp"/>
+
+                    <Button
+                        android:id="@+id/sendBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share to Whatsapp" />
+                    <Button
+                        android:id="@+id/readyBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/buttonshape"
+                        android:shadowColor="#A8A8A8"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="25"
+                        android:text="I'm ready"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp" />
+                    <Button
+                        android:id="@+id/submitBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/buttonshape"
+                        android:shadowColor="#A8A8A8"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="25"
+                        android:text="Submit"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp" />
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.1">
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

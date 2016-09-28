@@ -60,6 +60,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private Accelerometer accModule;
     TextView textView;
     TextView textView2;
+
+    EditText editName;
+    EditText editComment;
+    Boolean showEditFields;
+
     private String message;
     private String rawData;
     private int REFRESH_RATE;
@@ -73,10 +78,9 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private boolean aloitettu;
     private StringBuilder strBuild;
     private String kellotusData;
+    private Button readyBtn;
     private Button sendBtn;
-
-   // private MapView mapView;
-    //private GoogleMap map;
+    private Button submitBtn;
     private GoogleApiClient gac;
     private Location loc;
     protected String mLatitudeLabel;
@@ -92,38 +96,19 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected String mAddressOutput;
     protected boolean mAddressRequested;
     private AddressResultReceiver mResultReceiver;
-    private EditText editName;
-    private EditText editComment;
-    private Boolean showEditFields;
 
 
 
     public KellotusFragment(){
     }
 
+
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAddressRequested = false;
-        mAddressOutput = "";
+        setHasOptionsMenu(true);
         updateValuesFromBundle(savedInstanceState);
-
-        showEditFields = false;
-
-        //for counting
-        REFRESH_RATE = 100;
-        kellotettu = false;
-        loppu = false;
-        aloitettu = false;
-        d = 0;
-        strBuild = new StringBuilder();
-        kellotusData = "";
-        resultDone = false;
-
-        rdbh = new ResultsDBHelper(getContext());
-
-
         Activity owner= getActivity();
         if (!(owner instanceof FragmentSettings)) {
             throw new ClassCastException("Owning activity must implement the FragmentSettings interface");
@@ -131,18 +116,43 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
         settings= (FragmentSettings) owner;
         owner.getApplicationContext().bindService(new Intent(owner, MetaWearBleService.class), this, Context.BIND_AUTO_CREATE);
-    }
+        /**
+         * Instantiate variables
+         */
+        mAddressRequested = false;
+        mAddressOutput = "";
+        kellotettu = false;
+        loppu = false;
+        aloitettu = false;
+        resultDone = false;
+        showEditFields = false;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
+        REFRESH_RATE = 100;
+        d = 0;
+        strBuild = new StringBuilder();
+        kellotusData = "";
+        rdbh = new ResultsDBHelper(getContext());
+
         View view = inflater.inflate(R.layout.kellotus_layout, container, false);
-
+        /**
+         * Instantiate layout elements
+         */
         textView = (TextView) view.findViewById(R.id.timeview);
         textView2 = (TextView) view.findViewById(R.id.angleview);
-
+        readyBtn = (Button) view.findViewById(R.id.readyBtn);
+        submitBtn = (Button) view.findViewById(R.id.submitBtn);
         sendBtn = (Button) view.findViewById(R.id.sendBtn);
+        editName = (EditText) view.findViewById(R.id.edit_name) ;
+        editComment = (EditText) view.findViewById(R.id.edit_comment) ;
+
+        editName.setVisibility(View.GONE);
+        editComment.setVisibility(View.GONE);
+        submitBtn.setVisibility(View.GONE);
+
+
+
+        sendBtn.setVisibility(View.GONE);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,24 +165,19 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             }
         });
 
-        editName = (EditText) view.findViewById(R.id.edit_name) ;
-        editComment = (EditText) view.findViewById(R.id.edit_comment) ;
-        editName.setVisibility(View.GONE);
-        editComment.setVisibility(View.GONE);
-
         /**
-        mapView = (MapView) view.findViewById(R.id.mapview);
-        mapView.onCreate(savedInstanceState);
-        map = mapView.getMap();
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.setMyLocationEnabled(true);
+         mapView = (MapView) view.findViewById(R.id.mapview);
+         mapView.onCreate(savedInstanceState);
+         map = mapView.getMap();
+         map.getUiSettings().setMyLocationButtonEnabled(false);
+         map.setMyLocationEnabled(true);
 
-        try {
-            MapsInitializer.initialize(this.getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
+         try {
+         MapsInitializer.initialize(this.getActivity());
+         } catch (Exception e) {
+         e.printStackTrace();
+         }
+         */
         mResultReceiver = new AddressResultReceiver(new Handler());
 
         // Set defaults, then update using values stored in the Bundle.
@@ -221,27 +226,27 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     }
 
     /**
-    @Override
-    public void onResume() {
-        mapView.onResume();
-        super.onResume();
-    }
+     @Override
+     public void onResume() {
+     mapView.onResume();
+     super.onResume();
+     }
      */
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-       // mapView.onDestroy();
+        // mapView.onDestroy();
         getActivity().getApplicationContext().unbindService(this);
     }
-/**
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
+    /**
+     @Override
+     public void onLowMemory() {
+     super.onLowMemory();
+     mapView.onLowMemory();
+     }
 
-*/
+     */
     public void onStart() {
         gac.connect();
         super.onStart();
@@ -290,8 +295,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         }
 
         /**
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
-        map.animateCamera(cameraUpdate);
+         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
+         map.animateCamera(cameraUpdate);
          */
     }
 
@@ -343,7 +348,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.readybtn).setOnClickListener(new View.OnClickListener() {
+        readyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (gac.isConnected() && loc != null) {
@@ -357,57 +362,62 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 textView.setText("");
                 accModule.routeData().fromAxes().stream("acc_stream").commit()
                         .onComplete(new AsyncOperation.CompletionHandler<RouteManager>() {
-                    @Override
-                    public void success(final RouteManager result) {
-                        result.subscribe("acc_stream", new RouteManager.MessageHandler() {
                             @Override
-                            public void process(Message msg) {
-                                df = new DecimalFormatSymbols();
-                                df.setDecimalSeparator('.');
-                                rawData = msg.getData(CartesianFloat.class).toString();
-                                message = rawData.substring(1, 6);
-                                d = Double.parseDouble(message);
-                                d = (d + 1.03) * 90;
+                            public void success(final RouteManager result) {
+                                result.subscribe("acc_stream", new RouteManager.MessageHandler() {
+                                    @Override
+                                    public void process(Message msg) {
+                                        df = new DecimalFormatSymbols();
+                                        df.setDecimalSeparator('.');
+                                        rawData = msg.getData(CartesianFloat.class).toString();
+                                        message = rawData.substring(1, 6);
+                                        d = Double.parseDouble(message);
+                                        d = (d + 1.03) * 90;
 
-                                //Log.i("tutorial", msg.getData(CartesianFloat.class).toString());
-                                mHandler2.removeCallbacks(angle);
-                                mHandler2.postDelayed(angle, 0);
-                                strBuild.append(rawData + "\n");
-                                if(d >= 50 && aloitettu == false && kellotettu == false){
-                                    aloitettu = true;
-                                    startTime = System.currentTimeMillis();
-                                    //Log.i("Timestamp start ", startTime.toString());
-                                    //mHandler.post(mUpdateUITimerTask);
-                                    mHandler.removeCallbacks(startTimer);
-                                    mHandler.postDelayed(startTimer, 0);
+                                        //Log.i("tutorial", msg.getData(CartesianFloat.class).toString());
+                                        mHandler2.removeCallbacks(angle);
+                                        mHandler2.postDelayed(angle, 0);
+                                        strBuild.append(rawData + "\n");
+                                        if(d >= 50 && aloitettu == false && kellotettu == false){
+                                            aloitettu = true;
+                                            startTime = System.currentTimeMillis();
+                                            //Log.i("Timestamp start ", startTime.toString());
+                                            //mHandler.post(mUpdateUITimerTask);
+                                            mHandler.removeCallbacks(startTimer);
+                                            mHandler.postDelayed(startTimer, 0);
 
-                                }
-                                if(d > 100){
-                                    kellotettu = true;
-                                }
-                                if(d < 90 && kellotettu == true && loppu == false){
-                                    loppu = true;
-                                    endTime = System.currentTimeMillis();
-                                    //Log.i("Timestamp end ", endTime.toString());
-                                    Log.i("Result ", String.valueOf(timeResult));
-                                    kellotusData = strBuild.toString();
-                                    showEditFields = true;
-                                }
-                                if(kellotettu == true && aloitettu == true && loppu == true){
-                                    mHandler.removeCallbacks(startTimer);
-                                    int date = (int)endTime % Integer.MAX_VALUE;
-                                    if (resultDone == false) {
-                                        rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, "comment", "name", loc.getLatitude(), loc.getLongitude());
-                                        resultDone = true;
+
+
+                                        }
+                                        if(d > 100){
+                                            kellotettu = true;
+                                        }
+                                        if(d < 90 && kellotettu == true && loppu == false){
+                                            loppu = true;
+                                            endTime = System.currentTimeMillis();
+                                            //Log.i("Timestamp end ", endTime.toString());
+                                            Log.i("Result ", String.valueOf(timeResult));
+                                            kellotusData = strBuild.toString();
+                                            showEditFields = true;
+
+
+                                        }
+                                        if(kellotettu == true && aloitettu == true && loppu == true){
+
+                                            mHandler.removeCallbacks(startTimer);
+                                            int date = (int)endTime % Integer.MAX_VALUE;
+                                            if (resultDone == false) {
+                                                rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, "comment", "name", loc.getLatitude(), loc.getLongitude());
+                                                resultDone = true;
+                                            }
+                                        }
+
                                     }
-                                }
-
+                                });
+                                accModule.enableAxisSampling();
+                                accModule.start();
                             }
                         });
-                        accModule.enableAxisSampling();
-                        accModule.start();
-                    }
-                });
             }
         });
 
@@ -429,6 +439,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
 
 
+
         }
     };
     private final Runnable angle = new Runnable() {
@@ -441,10 +452,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             if (i<0) i=0;
             else if (i>180) i=180;
             textView2.setText("" + i);
-
             if(showEditFields) {
                 editName.setVisibility(View.VISIBLE);
                 editComment.setVisibility(View.VISIBLE);
+                readyBtn.setVisibility(View.GONE);
+                submitBtn.setVisibility(View.VISIBLE);
             }
 
 
@@ -487,9 +499,9 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     }
 
     /**protected void displayAddressOutput() {
-        textView3.setText(mAddressOutput);
+     textView3.setText(mAddressOutput);
 
-    }*/
+     }*/
 
     protected void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();

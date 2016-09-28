@@ -40,11 +40,13 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
         TextView tvName = (TextView) convertView.findViewById(R.id.nameview);
         TextView timeView = (TextView) convertView.findViewById(R.id.timeview);
         TextView kellotusView = (TextView) convertView.findViewById(R.id.kellotustimeview);
+        TextView commentView = (TextView) convertView.findViewById(R.id.commentview);
 
         // Populate the data into the template view using the data object
         tvName.setText(ri.name);
         timeView.setText(""+ri.time);
         kellotusView.setText(""+ri.kellotusTime);
+        commentView.setText(ri.comment);
 
         // Return the completed view to render on screen
         return convertView;

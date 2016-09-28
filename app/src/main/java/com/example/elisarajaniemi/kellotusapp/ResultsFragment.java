@@ -1,7 +1,10 @@
 package com.example.elisarajaniemi.kellotusapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -40,7 +44,7 @@ public class ResultsFragment extends Fragment {
     private TextView averageView;
     private int i;
     private LatLng latLng;
-   
+
 
 
     @Override
@@ -74,11 +78,11 @@ public class ResultsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
                 // TODO Auto-generated method stub
-                System.out.println("Position: "+position+ " Row ID: "+rowId);
+               /** System.out.println("Position: "+position+ " Row ID: "+rowId);
                 Object obj = listview.getAdapter().getItem(position);
                 ResultItem ri = (ResultItem)obj;
                 System.out.println("Time: " + ri.time);
-
+*/
 
             }
 
