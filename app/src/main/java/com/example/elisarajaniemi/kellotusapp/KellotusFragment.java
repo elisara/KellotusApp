@@ -87,7 +87,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private ResultsDBHelper rdbh;
     private boolean resultDone;
     private double dbtime;
-    private double kellotustime;
+    private int kellotustime;
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
     protected String mAddressOutput;
@@ -370,6 +370,19 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 if (!editName.getText().toString().isEmpty()) name = editName.getText().toString();
                 if (!editComment.getText().toString().isEmpty()) comment = editComment.getText().toString();
 
+                //count kellotustime
+                kellotustime = 1;
+                double valiLuku = (dbtime-28.9)/3.7;
+                if (dbtime-0.6 > 2.5)kellotustime = 2;
+                else if(dbtime-0.6 > 5) kellotustime = 3;
+                else if(dbtime-0.6 > 8) kellotustime = 4;
+                else if(dbtime-0.6 > 11) kellotustime = 5;
+                else if(dbtime-0.6 > 14.3) kellotustime = 6;
+                else if(dbtime-0.6 > 17.6) kellotustime = 7;
+                else if(dbtime-0.6 > 21.1) kellotustime = 8;
+                else if(dbtime-0.6 > 24.6) kellotustime = 9;
+                else if (dbtime-28.9 > 0) kellotustime = (int) valiLuku + 9;
+
 
                 int date = (int) endTime % Integer.MAX_VALUE;
                 rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, comment, name, loc.getLatitude(), loc.getLongitude());
@@ -400,7 +413,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             elapsedTime = (System.currentTimeMillis() - startTime);
             mHandler.postDelayed(this, REFRESH_RATE);
             dbtime = elapsedTime / 1000.0;
-            kellotustime = elapsedTime / 1000;
             textView.setText("" + elapsedTime / 1000.0);
 
             System.out.println("OSOITE: " + mAddressOutput);

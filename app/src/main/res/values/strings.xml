@@ -17,4 +17,11 @@
     <string name="ok">Share</string>
     <string name="cancel">Cancel</string>
     <string name="share_title">Share in WhatsApp</string>
+    <string name="sort_prompt">Sort by</string>
+
+    <string-array name="sort_array">
+        <item>RESULT</item>
+        <item>DATE</item>
+        <item>NAME</item>
+    </string-array>
 </resources>

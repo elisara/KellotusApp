@@ -28,7 +28,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS results(id INTEGER PRIMARY KEY AUTOINCREMENT, address VARCHAR, " +
-                "time DOUBLE, kellotustime DOUBLE, date INT, comment VARCHAR, name VARCHAR, latitude DOUBLE, longitude DOUBLE);");
+                "time DOUBLE, kellotustime INT, date INT, comment VARCHAR, name VARCHAR, latitude DOUBLE, longitude DOUBLE);");
         //values.clear();
 
     }
@@ -39,7 +39,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertResults (String address, double time, double kellotustime, int date, String comment, String name, double latitude, double longitude) {
+    public boolean insertResults (String address, double time, int kellotustime, int date, String comment, String name, double latitude, double longitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("address", address);
@@ -66,13 +66,47 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         while(c.isAfterLast() == false){
 
             ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
-                    c.getDouble(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
+                    c.getInt(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
                     c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
 
             resultList.add(0,ri);
             c.moveToNext();
         }
         return resultList;
+    }
+
+    public ArrayList<ResultItem> getResultsByName(){
+        ArrayList<ResultItem> resultByNameList = new ArrayList<>();
+        resultByNameList.clear();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from results order by name", null);
+        c.moveToFirst();
+
+        while(c.isAfterLast() == false){
+            ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
+                    c.getInt(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
+                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
+            resultByNameList.add(ri);
+            c.moveToNext();
+        }
+        return resultByNameList;
+    }
+
+    public ArrayList<ResultItem> getResultsByTime(){
+        ArrayList<ResultItem> resultByTimeList = new ArrayList<>();
+        resultByTimeList.clear();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from results order by time", null);
+        c.moveToFirst();
+
+        while(c.isAfterLast() == false){
+            ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
+                    c.getInt(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
+                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
+            resultByTimeList.add(ri);
+            c.moveToNext();
+        }
+        return resultByTimeList;
     }
 
     public double getAverage(){
