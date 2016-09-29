@@ -142,6 +142,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         tabLayout.setupWithViewPager(viewPager);
 
 
+
         /*results = new ResultsFragment();
         kellotus = new KellotusFragment();
 
@@ -157,6 +158,24 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
                 getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, results).commit();
             }
         });*/
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                System.out.println("CHANGEDDDDDDD");
+                //notifyDataSetChanged();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 

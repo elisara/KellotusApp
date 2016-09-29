@@ -22,6 +22,7 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
 
     ResultItem ri;
     ResultsFragment rf;
+    private ArrayList<ResultItem> list;
 
     public MyArrayAdapter(Context context, ArrayList<ResultItem> resultlist) {
         super(context, 0, resultlist);
@@ -50,6 +51,11 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    public void swapItems(ArrayList<ResultItem> items) {
+        this.list = items;
+        notifyDataSetChanged();
     }
 
 }

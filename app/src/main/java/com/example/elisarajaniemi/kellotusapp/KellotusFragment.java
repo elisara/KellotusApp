@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,6 +94,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected String mAddressOutput;
     protected boolean mAddressRequested;
     private AddressResultReceiver mResultReceiver;
+    ImageView can;
 
 
     public KellotusFragment() {
@@ -139,10 +141,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         submitBtn = (Button) view.findViewById(R.id.submitBtn);
         editName = (EditText) view.findViewById(R.id.edit_name);
         editComment = (EditText) view.findViewById(R.id.edit_comment);
+        can = (ImageView) view.findViewById(R.id.canView);
 
         editName.setVisibility(View.GONE);
         editComment.setVisibility(View.GONE);
         submitBtn.setVisibility(View.GONE);
+        can.setImageResource(R.drawable.can2);
 
 
         mResultReceiver = new AddressResultReceiver(new Handler());
@@ -429,7 +433,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             int i = Integer.valueOf(l.intValue());
             if (i < 0) i = 0;
             else if (i > 180) i = 180;
-            textView2.setText("" + i);
+            //textView2.setText("" + i);
+            can.setRotation(i);
             if (showEditFields) {
                 editName.setVisibility(View.VISIBLE);
                 editComment.setVisibility(View.VISIBLE);

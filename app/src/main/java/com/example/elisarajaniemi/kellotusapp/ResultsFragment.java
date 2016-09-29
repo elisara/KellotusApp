@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
  */
+
 public class ResultsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemSelectedListener {
 
     protected static final String TAG = "ResultFragment";
@@ -60,6 +61,7 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.results_layout, container, false);
 
+
         //create map
         mapView = (MapView) view.findViewById(R.id.mapview2);
         mapView.onCreate(savedInstanceState);
@@ -81,7 +83,7 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
         listview = (ListView) view.findViewById(R.id.resultview);
         rdbh = new ResultsDBHelper(getContext());
         resultlist = rdbh.getResults();
-        adapter = new MyArrayAdapter(getContext(),resultlist);
+        adapter = new MyArrayAdapter(getContext(),rdbh.getResults());
         listview.setAdapter(adapter);
 
         //Find locations on map when clicking results
@@ -194,8 +196,9 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
 
     @Override
     public void onResume() {
-        mapView.onResume();
         super.onResume();
+        mapView.onResume();
+
     }
     @Override
     public void onDestroy() {

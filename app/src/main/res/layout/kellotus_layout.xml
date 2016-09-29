@@ -32,6 +32,12 @@
                 android:textColor="#212121"
                 android:textSize="50dp" />
 
+            <ImageView
+                android:id="@+id/canView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <TextView
                 android:id="@+id/angleview"
                 android:layout_width="match_parent"
