@@ -168,6 +168,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
             @Override
             public void onPageSelected(int position) {
                 System.out.println("CHANGEDDDDDDD");
+                adapter.notifyDataSetChanged();
                 //notifyDataSetChanged();
             }
 
