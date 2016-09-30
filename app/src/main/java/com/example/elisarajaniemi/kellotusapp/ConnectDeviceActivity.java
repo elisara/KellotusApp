@@ -162,12 +162,11 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                //adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onPageSelected(int position) {
-                System.out.println("CHANGEDDDDDDD");
                 adapter.notifyDataSetChanged();
                 //notifyDataSetChanged();
             }

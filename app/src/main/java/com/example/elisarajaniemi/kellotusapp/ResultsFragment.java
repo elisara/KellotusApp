@@ -27,7 +27,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -105,7 +107,12 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                 Object obj = listview.getAdapter().getItem(position);
                 ResultItem ri = (ResultItem)obj;
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + "\nAika: " + ri.time + "\nKellotusaika: "+ ri.kellotusTime +"\n" + ri.comment + "\n" + ri.address);
+                long shareDate;
+                shareDate = (long)ri.date;
+                Date d = new Date(shareDate *1000);
+                SimpleDateFormat ft = new SimpleDateFormat("dd.MM   hh:mm");
+
+                sendIntent.putExtra(Intent.EXTRA_TEXT, ft.format(d) +"\n"+ ri.name + "\nAika: "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.comment + "\n" + ri.address);
                 sendIntent.setType("text/plain");
                 //sendIntent.setPackage("com.whatsapp");
                 startActivity(sendIntent);

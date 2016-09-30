@@ -44,6 +44,7 @@ import com.mbientlab.metawear.module.Accelerometer;
 
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
@@ -388,7 +389,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 else if (dbtime-28.9 > 0) kellotustime = (int) valiLuku + 9;
 
 
-                int date = (int) endTime % Integer.MAX_VALUE;
+                int date = (int) (new Date().getTime()/1000);
                 rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, comment, name, loc.getLatitude(), loc.getLongitude());
                 showToast("Saved successfully");
 
