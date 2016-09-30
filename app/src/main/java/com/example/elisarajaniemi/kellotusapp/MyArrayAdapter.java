@@ -40,6 +40,7 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
         // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.nameview);
         TextView timeView = (TextView) convertView.findViewById(R.id.timeview);
+        TextView tvAngle = (TextView) convertView.findViewById(R.id.angle);
         TextView kellotusView = (TextView) convertView.findViewById(R.id.kellotustimeview);
         TextView commentView = (TextView) convertView.findViewById(R.id.commentview);
 
@@ -47,6 +48,7 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
         tvName.setText(ri.name);
         kellotusView.setText(""+ri.kellotusTime);
         timeView.setText("("+ri.time+"s)");
+        tvAngle.setText(""+ri.maxAngle);
         commentView.setText(ri.comment);
 
         // Return the completed view to render on screen

@@ -28,7 +28,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS results(id INTEGER PRIMARY KEY AUTOINCREMENT, address VARCHAR, " +
-                "time DOUBLE, kellotustime INT, date INT, comment VARCHAR, name VARCHAR, latitude DOUBLE, longitude DOUBLE);");
+                "time DOUBLE, kellotustime INT, date INT, comment VARCHAR, name VARCHAR, latitude DOUBLE, longitude DOUBLE, maxangle INT);");
         //values.clear();
 
     }
@@ -39,7 +39,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertResults (String address, double time, int kellotustime, int date, String comment, String name, double latitude, double longitude) {
+    public boolean insertResults (String address, double time, int kellotustime, int date, String comment, String name, double latitude, double longitude, int maxAngle) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("address", address);
@@ -50,6 +50,7 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         contentValues.put("name", name);
         contentValues.put("latitude", latitude);
         contentValues.put("longitude", longitude);
+        contentValues.put("maxangle", maxAngle);
 
         db.insert("results", null, contentValues);
         return true;
@@ -67,7 +68,8 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
 
             ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
                     c.getInt(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
-                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
+                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),
+                    c.getDouble(c.getColumnIndex("longitude")),c.getInt(c.getColumnIndex("maxangle")));
 
             resultList.add(0,ri);
             c.moveToNext();
@@ -85,7 +87,8 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         while(c.isAfterLast() == false){
             ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
                     c.getInt(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
-                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
+                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),
+                    c.getDouble(c.getColumnIndex("longitude")),c.getInt(c.getColumnIndex("maxangle")));
             resultByNameList.add(ri);
             c.moveToNext();
         }
@@ -102,7 +105,8 @@ public class ResultsDBHelper extends SQLiteOpenHelper {
         while(c.isAfterLast() == false){
             ri = new ResultItem(c.getString(c.getColumnIndex("address")), c.getDouble(c.getColumnIndex("time")),
                     c.getInt(c.getColumnIndex("kellotustime")),c.getString(c.getColumnIndex("comment")),
-                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),c.getDouble(c.getColumnIndex("longitude")));
+                    c.getString(c.getColumnIndex("name")),c.getInt(c.getColumnIndex("date")),c.getDouble(c.getColumnIndex("latitude")),
+                    c.getDouble(c.getColumnIndex("longitude")),c.getInt(c.getColumnIndex("maxangle")));
             resultByTimeList.add(ri);
             c.moveToNext();
         }

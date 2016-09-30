@@ -17,9 +17,10 @@ public class ResultItem {
     public int date;
     public double latitude;
     public double longitude;
+    public int maxAngle;
 
 
-    public ResultItem(String address, double time, int kellotusTime, String comment, String name, int date, double latitude, double longitude){
+    public ResultItem(String address, double time, int kellotusTime, String comment, String name, int date, double latitude, double longitude, int maxAngle){
         this.address = address;
         this.time = time;
         this.kellotusTime = kellotusTime;
@@ -28,6 +29,7 @@ public class ResultItem {
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.maxAngle = maxAngle;
     }
 
 

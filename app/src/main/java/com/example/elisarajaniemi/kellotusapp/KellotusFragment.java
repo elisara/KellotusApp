@@ -96,6 +96,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected boolean mAddressRequested;
     private AddressResultReceiver mResultReceiver;
     ImageView can;
+    private int maxAngle;
 
 
     public KellotusFragment() {
@@ -124,6 +125,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         aloitettu = false;
         resultDone = false;
         showEditFields = false;
+        maxAngle = 0;
 
 
         REFRESH_RATE = 100;
@@ -310,6 +312,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         readyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showToast("Start drinking when ready");
                 if (gac.isConnected() && loc != null) {
                     startIntentService();
                 }
@@ -340,10 +343,10 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
 
                                         }
-                                        if (d > 150) {
+                                        if (d > 120) {
                                             kellotettu = true;
                                         }
-                                        if (d < 90 && kellotettu == true && loppu == false) {
+                                        if (d < 45 && kellotettu == true && loppu == false) {
                                             loppu = true;
                                             endTime = System.currentTimeMillis();
                                             //Log.i("Timestamp end ", endTime.toString());
@@ -376,23 +379,13 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 if (!editComment.getText().toString().isEmpty()) comment = editComment.getText().toString();
 
                 //count kellotustime
-                kellotustime = 1;
-                double valiLuku = (dbtime-28.9)/3.7;
-                System.out.println("DBTIME" +dbtime);
-                if ((dbtime-0.6) >= 2.5 && (dbtime-0.6)<5)kellotustime = 2;
-                else if((dbtime-0.6) >= 5 && (dbtime-0.6)< 8) kellotustime = 3;
-                else if((dbtime-0.6) >= 8 && (dbtime-0.6) < 11) kellotustime = 4;
-                else if((dbtime-0.6) >= 11 && (dbtime-0.6) < 14.3) kellotustime = 5;
-                else if((dbtime-0.6) >= 14.3 && (dbtime-0.6) < 17.6) kellotustime = 6;
-                else if((dbtime-0.6) >= 17.6 && (dbtime-0.6) < 21.1) kellotustime = 7;
-                else if((dbtime-0.6) >= 21.1 && (dbtime-0.6) < 24.6) kellotustime = 8;
-                else if((dbtime-0.6) >= 24.6 && (dbtime-0.6) < 28.9) kellotustime = 9;
-                else if ((dbtime-28.9) > 0) kellotustime = (int) valiLuku + 10;
 
 
                 int date = (int) (new Date().getTime()/1000);
-                rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, comment, name, loc.getLatitude(), loc.getLongitude());
+                rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, comment, name, loc.getLatitude(), loc.getLongitude(), maxAngle);
                 showToast("Saved successfully");
+                editName.setText("");
+                editComment.setText("");
 
                 mAddressRequested = true;
 
@@ -401,6 +394,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 aloitettu = false;
                 showEditFields = false;
                 textView.setText("");
+                textView2.setText("");
                 editName.setVisibility(View.GONE);
                 editComment.setVisibility(View.GONE);
                 readyBtn.setVisibility(View.VISIBLE);
@@ -419,11 +413,22 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             elapsedTime = (System.currentTimeMillis() - startTime);
             mHandler.postDelayed(this, REFRESH_RATE);
             dbtime = elapsedTime / 1000.0;
-            textView.setText("" + elapsedTime / 1000.0);
 
-            System.out.println("OSOITE: " + mAddressOutput);
+            kellotustime = 1;
+            double valiLuku = (dbtime-28.9)/3.7;
+            System.out.println("DBTIME" +dbtime);
+            if ((dbtime-0.6) >= 2.5 && (dbtime-0.6)<5)kellotustime = 2;
+            else if((dbtime-0.6) >= 5 && (dbtime-0.6)< 8) kellotustime = 3;
+            else if((dbtime-0.6) >= 8 && (dbtime-0.6) < 11) kellotustime = 4;
+            else if((dbtime-0.6) >= 11 && (dbtime-0.6) < 14.3) kellotustime = 5;
+            else if((dbtime-0.6) >= 14.3 && (dbtime-0.6) < 17.6) kellotustime = 6;
+            else if((dbtime-0.6) >= 17.6 && (dbtime-0.6) < 21.1) kellotustime = 7;
+            else if((dbtime-0.6) >= 21.1 && (dbtime-0.6) < 24.6) kellotustime = 8;
+            else if((dbtime-0.6) >= 24.6 && (dbtime-0.6) < 28.9) kellotustime = 9;
+            else if ((dbtime-28.9) > 0) kellotustime = (int) valiLuku + 10;
 
-
+            textView.setText(""+kellotustime);
+            textView2.setText("" + elapsedTime / 1000.0+"s");
         }
     };
     private final Runnable angle = new Runnable() {
@@ -442,6 +447,9 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 editComment.setVisibility(View.VISIBLE);
                 readyBtn.setVisibility(View.GONE);
                 submitBtn.setVisibility(View.VISIBLE);
+            }
+            if(i > maxAngle){
+                maxAngle = i;
             }
 
 
