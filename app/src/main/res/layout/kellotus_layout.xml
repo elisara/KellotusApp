@@ -30,7 +30,7 @@
                 android:layout_weight="0.5"
                 android:gravity="center"
                 android:textColor="#212121"
-                android:textSize="50dp" />
+                android:textSize="70dp" />
 
             <TextView
                 android:id="@+id/angleview"
@@ -44,6 +44,8 @@
                 android:id="@+id/canView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="60dp"
+                android:paddingTop="60dp"
                 />
 
         </LinearLayout>

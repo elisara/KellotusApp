@@ -5,7 +5,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/bottle"/>
+            android:src="@drawable/can"/>
     </item>
 
 </layer-list>
