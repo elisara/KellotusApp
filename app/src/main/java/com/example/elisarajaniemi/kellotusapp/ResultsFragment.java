@@ -110,9 +110,10 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                 long shareDate;
                 shareDate = (long)ri.date;
                 Date d = new Date(shareDate *1000);
-                SimpleDateFormat ft = new SimpleDateFormat("dd.MM   hh:mm");
+                SimpleDateFormat ft = new SimpleDateFormat("dd.MM.   HH:mm");
 
-                sendIntent.putExtra(Intent.EXTRA_TEXT, ft.format(d) +"\n"+ ri.name + "\nAika: "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.comment + "\n" + ri.address);
+                if (ri.comment.length() > 0)sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + " "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.comment + "\n" + ri.address);
+                else sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + " "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.address);
                 sendIntent.setType("text/plain");
                 //sendIntent.setPackage("com.whatsapp");
                 startActivity(sendIntent);
