@@ -340,7 +340,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
 
                                         }
-                                        if (d > 100) {
+                                        if (d > 150) {
                                             kellotettu = true;
                                         }
                                         if (d < 90 && kellotettu == true && loppu == false) {
@@ -378,15 +378,16 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 //count kellotustime
                 kellotustime = 1;
                 double valiLuku = (dbtime-28.9)/3.7;
-                if (dbtime-0.6 > 2.5)kellotustime = 2;
-                else if(dbtime-0.6 > 5) kellotustime = 3;
-                else if(dbtime-0.6 > 8) kellotustime = 4;
-                else if(dbtime-0.6 > 11) kellotustime = 5;
-                else if(dbtime-0.6 > 14.3) kellotustime = 6;
-                else if(dbtime-0.6 > 17.6) kellotustime = 7;
-                else if(dbtime-0.6 > 21.1) kellotustime = 8;
-                else if(dbtime-0.6 > 24.6) kellotustime = 9;
-                else if (dbtime-28.9 > 0) kellotustime = (int) valiLuku + 9;
+                System.out.println("DBTIME" +dbtime);
+                if ((dbtime-0.6) >= 2.5 && (dbtime-0.6)<5)kellotustime = 2;
+                else if((dbtime-0.6) >= 5 && (dbtime-0.6)< 8) kellotustime = 3;
+                else if((dbtime-0.6) >= 8 && (dbtime-0.6) < 11) kellotustime = 4;
+                else if((dbtime-0.6) >= 11 && (dbtime-0.6) < 14.3) kellotustime = 5;
+                else if((dbtime-0.6) >= 14.3 && (dbtime-0.6) < 17.6) kellotustime = 6;
+                else if((dbtime-0.6) >= 17.6 && (dbtime-0.6) < 21.1) kellotustime = 7;
+                else if((dbtime-0.6) >= 21.1 && (dbtime-0.6) < 24.6) kellotustime = 8;
+                else if((dbtime-0.6) >= 24.6 && (dbtime-0.6) < 28.9) kellotustime = 9;
+                else if ((dbtime-28.9) > 0) kellotustime = (int) valiLuku + 10;
 
 
                 int date = (int) (new Date().getTime()/1000);

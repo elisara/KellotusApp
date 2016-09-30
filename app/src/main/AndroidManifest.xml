@@ -35,16 +35,9 @@
             android:value="AIzaSyCY-6pa1SE7jr54DTAI5XlBuCsWjyonjKI"/>
 
         <activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name"
-            android:theme="@style/SplashTheme">
-          
-        </activity>
-
-        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
