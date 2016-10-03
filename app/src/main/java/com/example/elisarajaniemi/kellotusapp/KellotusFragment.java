@@ -57,46 +57,32 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
     protected static final String TAG = "MainActivity";
 
+
+    private Accelerometer accModule;
+    private TextView textView, textView2;
+    private EditText editName,editComment;
+    private ImageView can;
+    private Button readyBtn, submitBtn;
+
+    private String message, rawData, name, comment;
+    private int REFRESH_RATE, kellotustime, maxAngle;
+    private double d, dbtime, timeResult;
+    private long startTime, endTime, elapsedTime;
+    private boolean kellotettu, loppu, aloitettu, resultDone, showEditFields;
+
     private MetaWearBoard mwBoard = null;
     private FragmentSettings settings;
-    private Accelerometer accModule;
-    TextView textView;
-    TextView textView2;
-    EditText editName;
-    EditText editComment;
-    Boolean showEditFields;
-    private String message;
-    private String rawData;
-    private String name;
-    private String comment;
-    private int REFRESH_RATE;
-    private double d;
-    private long startTime;
-    private long endTime;
-    private long elapsedTime;
-    private double timeResult;
-    private boolean kellotettu;
-    private boolean loppu;
-    private boolean aloitettu;
     private StringBuilder strBuild;
-    private Button readyBtn;
-    private Button submitBtn;
     private GoogleApiClient gac;
     private Location loc;
-    protected String mLatitudeLabel;
-    protected String mLongitudeLabel;
     private DecimalFormatSymbols df;
     private ResultsDBHelper rdbh;
-    private boolean resultDone;
-    private double dbtime;
-    private int kellotustime;
+    private AddressResultReceiver mResultReceiver;
+
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
     protected String mAddressOutput;
     protected boolean mAddressRequested;
-    private AddressResultReceiver mResultReceiver;
-    ImageView can;
-    private int maxAngle;
 
 
     public KellotusFragment() {
@@ -151,7 +137,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         submitBtn.setVisibility(View.GONE);
         can.setImageResource(R.drawable.can2);
 
-
         mResultReceiver = new AddressResultReceiver(new Handler());
 
         // Set defaults, then update using values stored in the Bundle.
@@ -186,16 +171,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     protected void startIntentService() {
         // Create an intent for passing to the intent service responsible for fetching the address.
         Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
-
-        // Pass the result receiver as an extra to the service.
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
-
-        // Pass the location data as an extra to the service.
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
-
-        // Start the service. If the service isn't already running, it is instantiated and started
-        // (creating a process for it if needed); if it is running then it remains running. The
-        // service kills itself automatically once all intents are processed.
         getActivity().startService(intent);
     }
 
@@ -203,7 +180,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // mapView.onDestroy();
         getActivity().getApplicationContext().unbindService(this);
     }
 
@@ -227,37 +203,19 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        // Provides a simple way of getting a device's location and is well suited for
-        // applications that do not require a fine-grained location and that do not need location
-        // updates. Gets the best and most recent location currently available, which may be null
-        // in rare cases when a location is not available.
         loc = LocationServices.FusedLocationApi.getLastLocation(gac);
         if (loc != null) {
-            // Determine whether a Geocoder is available.
             if (!Geocoder.isPresent()) {
                 Toast.makeText(getContext(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
                 return;
             }
-            // It is possible that the user presses the button to get the address before the
-            // GoogleApiClient object successfully connects. In such a case, mAddressRequested
-            // is set to true, but no attempt is made to fetch the address (see
-            // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
-            // user has requested an address, since we now have a connection to GoogleApiClient.
             if (mAddressRequested) {
                 startIntentService();
             }
-            System.out.println(String.format("%s: %f", mLatitudeLabel, loc.getLatitude()));
-            System.out.println("Latitude: " + loc.getLatitude());
-            System.out.println(String.format("%s: %f", mLongitudeLabel, loc.getLongitude()));
-            System.out.println("Longitude: " + loc.getLongitude());
         } else {
             System.out.println("No location detected");
         }
 
-        /**
-         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
-         map.animateCamera(cameraUpdate);
-         */
     }
 
     @Override
@@ -485,18 +443,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             if (resultCode == 1) {
                 mAddressOutput = "Kellotettu";
             }
-
             // Reset. Enable the Fetch Address button and stop showing the progress bar.
             mAddressRequested = false;
         }
     }
 
-    /**
-     * protected void displayAddressOutput() {
-     * textView3.setText(mAddressOutput);
-     * <p>
-     * }
-     */
 
     protected void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();

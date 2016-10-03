@@ -40,29 +40,27 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
 
     protected static final String TAG = "ResultFragment";
 
-    private ListView listview;
     private ArrayList resultlist;
     private ResultsDBHelper rdbh;
     private MyArrayAdapter adapter;
     private MapView mapView;
     private GoogleMap map;
-    private TextView countView;
-    private int count;
-    private TextView averageView;
-    private int i;
     private LatLng latLng;
-
     private GoogleApiClient gac;
     private Location loc;
-    protected String mLatitudeLabel;
-    protected String mLongitudeLabel;
+
+    private TextView averageView;
+    private ListView listview;
+    private TextView countView;
     private Spinner spinner;
+
+    private int count, i;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.results_layout, container, false);
-
 
         //create map
         mapView = (MapView) view.findViewById(R.id.mapview2);
@@ -143,11 +141,14 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                         .snippet(Double.toString(rdbh.getResults().get(i).kellotusTime)));
                 i++;
             }
+
         }catch (Exception e){
             System.out.println(e);
         }
 
         buildGoogleApiClient();
+        System.out.println("GAC DONE");
+
         return view;
     }
 
@@ -200,6 +201,7 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
     }
 
     @Override
@@ -230,15 +232,14 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public void onConnected(Bundle connectionHint) {
         loc = LocationServices.FusedLocationApi.getLastLocation(gac);
-        if(loc !=null) {
-            System.out.println(String.format("%s: %f", mLatitudeLabel, loc.getLatitude()));
+        if (loc != null) {
             System.out.println("Latitude: " + loc.getLatitude());
-            System.out.println(String.format("%s: %f", mLongitudeLabel, loc.getLongitude()));
             System.out.println("Longitude: " + loc.getLongitude());
         }
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 13);
         map.animateCamera(cameraUpdate);
     }
+
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -248,9 +249,8 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public void onConnectionSuspended(int cause) {
         Log.i(TAG, "Connection suspended");
+
         gac.connect();
     }
-
-
-
 }
+

@@ -24,8 +24,6 @@ import static android.view.View.VISIBLE;
 public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
 
     ResultItem ri;
-    ResultsFragment rf;
-    private ArrayList<ResultItem> list;
 
     public MyArrayAdapter(Context context, ArrayList<ResultItem> resultlist) {
         super(context, 0, resultlist);
@@ -33,8 +31,7 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        //showExtra = false;
+
         ri = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -45,30 +42,20 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
         Date d = new Date(shareDate *1000);
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM. HH:mm");
 
-        // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.nameview);
         TextView timeView = (TextView) convertView.findViewById(R.id.timeview);
         TextView tvAngle = (TextView) convertView.findViewById(R.id.angle);
-        //TextView kellotusView = (TextView) convertView.findViewById(R.id.kellotustimeview);
         TextView commentView = (TextView) convertView.findViewById(R.id.commentview);
         TextView tvDate = (TextView) convertView.findViewById(R.id.dateview);
 
-        // Populate the data into the template view using the data object
         tvDate.setText(ft.format(d));
         tvName.setText(ri.name);
-        //kellotusView.setText(""+ri.kellotusTime);
         timeView.setText(""+ri.kellotusTime+ "  (" + ri.time+"s)");
         tvAngle.setText(""+ri.maxAngle);
         commentView.setText(ri.comment);
 
-
-        // Return the completed view to render on screen
         return convertView;
     }
 
-    public void swapItems(ArrayList<ResultItem> items) {
-        this.list = items;
-        notifyDataSetChanged();
-    }
 
 }

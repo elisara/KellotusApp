@@ -223,3 +223,5 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         return btDevice;
     }
 }
+
+

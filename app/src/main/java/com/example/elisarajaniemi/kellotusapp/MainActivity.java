@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.mbientlab.bletoolbox.scanner.BleScannerFragment;
 import com.mbientlab.metawear.MetaWearBleService;
 import com.mbientlab.metawear.MetaWearBoard;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
     private MetaWearBleService.LocalBinder serviceBinder;
     private MetaWearBoard mwBoard;
+    public GoogleApiClient gac;
 
 
     @Override
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
     public void onDestroy() {
         super.onDestroy();
 
-        ///< Unbind the service when the activity is destroyed
+        //Unbind the service when the activity is destroyed
         getApplicationContext().unbindService(this);
     }
 
@@ -129,25 +132,17 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //Inflate the menu; this adds items to the action bar if it is present.
-        //MenuInflater inflater = getMenuInflater();
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
         if (id == R.id.action_disconnect) {
-
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
