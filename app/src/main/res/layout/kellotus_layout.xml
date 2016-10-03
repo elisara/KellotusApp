@@ -77,6 +77,7 @@
                         android:id="@+id/edit_name"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:maxLength="25"
                         android:hint="name" />
 
                     <EditText
@@ -86,6 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:hint="comment"
+                        android:maxLength="45"
                         android:layout_marginBottom="20dp"/>
 
                     <Button

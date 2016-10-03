@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="72dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,10 +16,9 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/nameview"
-            android:padding="5sp"
             android:textSize="16dp"
             android:textColor="#000000"
             android:layout_weight="1"
@@ -27,15 +26,12 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/timeview"
-            android:padding="5sp"
             android:textSize="15dp"
             android:textColor="#000000"
             android:layout_weight="1"
             android:layout_gravity="left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -43,25 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"
             android:paddingBottom="5sp"
             android:textColor="#000000"
             android:id="@+id/commentview"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/angle"
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"
-            android:paddingBottom="5sp"
-            android:textColor="#000000"
-            android:layout_weight="1"
-            android:layout_gravity="left"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>

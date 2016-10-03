@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.R.attr.tension;
 import static android.R.attr.visible;
@@ -40,18 +41,18 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
         long shareDate;
         shareDate = (long)ri.date;
         Date d = new Date(shareDate *1000);
-        SimpleDateFormat ft = new SimpleDateFormat("dd.MM. HH:mm");
+        SimpleDateFormat ft = new SimpleDateFormat("E,  d.MM  HH:mm");
 
         TextView tvName = (TextView) convertView.findViewById(R.id.nameview);
         TextView timeView = (TextView) convertView.findViewById(R.id.timeview);
-        TextView tvAngle = (TextView) convertView.findViewById(R.id.angle);
+       // TextView tvAngle = (TextView) convertView.findViewById(R.id.angle);
         TextView commentView = (TextView) convertView.findViewById(R.id.commentview);
         TextView tvDate = (TextView) convertView.findViewById(R.id.dateview);
 
         tvDate.setText(ft.format(d));
         tvName.setText(ri.name);
         timeView.setText(""+ri.kellotusTime+ "  (" + ri.time+"s)");
-        tvAngle.setText(""+ri.maxAngle);
+        //tvAngle.setText(""+ri.maxAngle);
         commentView.setText(ri.comment);
 
         return convertView;

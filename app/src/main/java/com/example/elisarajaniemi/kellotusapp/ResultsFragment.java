@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Elisa Rajaniemi on 22.9.2016.
@@ -109,6 +110,8 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                 shareDate = (long)ri.date;
                 Date d = new Date(shareDate *1000);
                 SimpleDateFormat ft = new SimpleDateFormat("dd.MM.   HH:mm");
+
+
 
                 if (ri.comment.length() > 0)sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + " "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.comment + "\n" + ri.address);
                 else sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + " "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.address);
