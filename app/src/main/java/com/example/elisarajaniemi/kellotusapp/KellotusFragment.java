@@ -135,7 +135,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         editName.setVisibility(View.GONE);
         editComment.setVisibility(View.GONE);
         submitBtn.setVisibility(View.GONE);
-        can.setImageResource(R.drawable.can2);
+        can.setImageResource(R.drawable.can);
 
         mResultReceiver = new AddressResultReceiver(new Handler());
 
@@ -271,6 +271,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             @Override
             public void onClick(View v) {
                 showToast("Start drinking when ready");
+                can.setImageResource(R.drawable.orange_can_open);
                 if (gac.isConnected() && loc != null) {
                     startIntentService();
                 }

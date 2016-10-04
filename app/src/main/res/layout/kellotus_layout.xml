@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
             android:orientation="vertical">
@@ -27,8 +27,9 @@
                 android:id="@+id/timeview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight=".5"
                 android:gravity="center"
+                android:elevation="1dp"
                 android:textColor="#212121"
                 android:textSize="70dp" />
 
@@ -36,16 +37,17 @@
                 android:id="@+id/angleview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight=".5"
                 android:gravity="center"
                 android:textSize="20dp" />
 
             <ImageView
                 android:id="@+id/canView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="60dp"
-                android:paddingTop="60dp"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
                 />
 
         </LinearLayout>
@@ -87,7 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:hint="comment"
-                        android:maxLength="40"
+                        android:maxLength="50"
                         android:layout_marginBottom="20dp"/>
 
                     <Button

@@ -11,7 +11,7 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimaryLight"
         android:orientation="horizontal"
         android:elevation="3dp"
         android:layout_width="match_parent"
