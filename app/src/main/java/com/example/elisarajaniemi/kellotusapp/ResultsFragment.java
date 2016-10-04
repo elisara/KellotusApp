@@ -91,7 +91,7 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(position).latitude, rdbh.getResults().get(position).longitude), 13);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(position).latitude, rdbh.getResults().get(position).longitude), 17);
                 map.animateCamera(cameraUpdate);
 
             }
@@ -141,7 +141,7 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                 Marker mapMarker = map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(rdbh.getResults().get(i).address)
-                        .snippet(Double.toString(rdbh.getResults().get(i).kellotusTime)));
+                        .snippet(rdbh.getResults().get(i).name +" " +rdbh.getResults().get(i).kellotusTime+" ("+rdbh.getResults().get(i).time +"s)"));
                 i++;
             }
 
