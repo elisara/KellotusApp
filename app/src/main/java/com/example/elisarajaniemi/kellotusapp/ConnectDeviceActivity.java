@@ -44,7 +44,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         private ProgressDialog reconnectDialog = null;
         private BluetoothDevice btDevice = null;
         private MetaWearBoard currentMwBoard = null;
-        
+
         public static ReconnectDialogFragment newInstance(BluetoothDevice btDevice) {
             Bundle args = new Bundle();
             args.putParcelable(KEY_BLUETOOTH_DEVICE, btDevice);

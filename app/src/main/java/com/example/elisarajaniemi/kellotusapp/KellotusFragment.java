@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -70,7 +71,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private int REFRESH_RATE, kellotustime, maxAngle;
     private double d, dbtime, timeResult;
     private long startTime, endTime, elapsedTime;
-    private boolean kellotettu, loppu, aloitettu, resultDone, showEditFields;
+    private boolean kellotettu, loppu, aloitettu, resultDone, showEditFields, finished;
 
     private MetaWearBoard mwBoard = null;
     private FragmentSettings settings;
@@ -114,6 +115,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         resultDone = false;
         showEditFields = false;
         maxAngle = 0;
+        finished = false;
 
 
         REFRESH_RATE = 100;
@@ -275,7 +277,12 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             @Override
             public void onClick(View v) {
                 showToast("Start drinking when ready");
-                can.setImageResource(R.drawable.orange_can_open);
+                if(finished == false) {
+                    MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.can_sound);
+                    mediaPlayer.start();
+                    finished = true;
+                }
+                can.setImageResource(R.drawable.orange_can_open2);
                 if (gac.isConnected() && loc != null) {
                     startIntentService();
                 }
@@ -337,14 +344,11 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             @Override
             public void onClick(View v) {
                 inputManager.hideSoftInputFromWindow(v.getWindowToken(),
-                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                InputMethodManager.RESULT_UNCHANGED_SHOWN);
                 name = "Anonymous";
                 comment = "";
                 if (!editName.getText().toString().isEmpty()) name = editName.getText().toString();
                 if (!editComment.getText().toString().isEmpty()) comment = editComment.getText().toString();
-
-                //count kellotustime
-
 
                 int date = (int) (new Date().getTime()/1000);
                 rdbh.insertResults(mAddressOutput, dbtime, kellotustime, date, comment, name, loc.getLatitude(), loc.getLongitude(), maxAngle);
@@ -364,6 +368,9 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                 editComment.setVisibility(View.GONE);
                 readyBtn.setVisibility(View.VISIBLE);
                 submitBtn.setVisibility(View.GONE);
+                finished = false;
+                accModule.stop();
+                can.setImageResource(R.drawable.can);
 
 
             }
@@ -378,7 +385,6 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
             elapsedTime = (System.currentTimeMillis() - startTime);
             mHandler.postDelayed(this, REFRESH_RATE);
             dbtime = elapsedTime / 1000.0;
-
             kellotustime = 1;
             double valiLuku = (dbtime-28.9)/3.7;
             System.out.println("DBTIME" +dbtime);
