@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -63,6 +64,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private EditText editName,editComment;
     private ImageView can;
     private Button readyBtn, submitBtn;
+    private InputMethodManager inputManager;
 
     private String message, rawData, name, comment;
     private int REFRESH_RATE, kellotustime, maxAngle;
@@ -131,6 +133,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         editName = (EditText) view.findViewById(R.id.edit_name);
         editComment = (EditText) view.findViewById(R.id.edit_comment);
         can = (ImageView) view.findViewById(R.id.canView);
+        inputManager = (InputMethodManager)
+                owner.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         editName.setVisibility(View.GONE);
         editComment.setVisibility(View.GONE);
@@ -332,6 +336,8 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inputManager.hideSoftInputFromWindow(v.getWindowToken(),
+                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
                 name = "Anonymous";
                 comment = "";
                 if (!editName.getText().toString().isEmpty()) name = editName.getText().toString();
