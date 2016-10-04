@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
     private MetaWearBleService.LocalBinder serviceBinder;
     private MetaWearBoard mwBoard;
-    public GoogleApiClient gac;
 
 
     @Override
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
-
 
     }
 

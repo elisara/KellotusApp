@@ -33,9 +33,6 @@ import com.example.elisarajaniemi.kellotusapp.KellotusFragment.FragmentSettings;
 public class ConnectDeviceActivity extends AppCompatActivity implements ServiceConnection, FragmentSettings {
     public final static String EXTRA_BT_DEVICE= "com.example.elisarajaniemi.kellotusapp.ConnectDeviceActivity.EXTRA_BT_DEVICE";
 
-    Button mapButton, resultsButton;
-    ResultsFragment results;
-    KellotusFragment kellotus;
     TabLayout tabLayout;
     ViewPager viewPager;
     PagerAdapter adapter;
@@ -47,9 +44,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         private ProgressDialog reconnectDialog = null;
         private BluetoothDevice btDevice = null;
         private MetaWearBoard currentMwBoard = null;
-
-
-
+        
         public static ReconnectDialogFragment newInstance(BluetoothDevice btDevice) {
             Bundle args = new Bundle();
             args.putParcelable(KEY_BLUETOOTH_DEVICE, btDevice);
@@ -99,7 +94,6 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         @Override
         public void connected() {
             ((DialogFragment) getSupportFragmentManager().findFragmentByTag(RECONNECT_DIALOG_TAG)).dismiss();
-            //((KellotusFragment) getSupportFragmentManager().findFragmentById(R.id.device_setup_fragment)).reconnected();
             System.out.println("Connected");
         }
 
@@ -140,24 +134,6 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         adapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-
-
-        /*results = new ResultsFragment();
-        kellotus = new KellotusFragment();
-
-        mapButton = (Button) findViewById(R.id.mapbtn);
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, kellotus).commit();
-            }
-        });
-        resultsButton = (Button) findViewById(R.id.resultbtn);
-        resultsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, results).commit();
-            }
-        });*/
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -210,7 +186,6 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
     public void onServiceConnected(ComponentName name, IBinder service) {
         mwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(btDevice);
         mwBoard.setConnectionStateHandler(connectionHandler);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, kellotus).commit();
     }
 
     @Override
