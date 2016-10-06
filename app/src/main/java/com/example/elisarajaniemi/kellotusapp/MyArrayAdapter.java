@@ -1,10 +1,13 @@
 package com.example.elisarajaniemi.kellotusapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -26,12 +29,13 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
 
     ResultItem ri;
 
+
     public MyArrayAdapter(Context context, ArrayList<ResultItem> resultlist) {
         super(context, 0, resultlist);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         ri = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -54,6 +58,7 @@ public class MyArrayAdapter extends ArrayAdapter<ResultItem> {
         timeView.setText(""+ri.kellotusTime+ "  (" + ri.time+"s)");
         //tvAngle.setText(""+ri.maxAngle);
         commentView.setText(ri.comment);
+
 
         return convertView;
     }

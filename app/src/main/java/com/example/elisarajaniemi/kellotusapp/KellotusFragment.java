@@ -116,6 +116,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
         showEditFields = false;
         maxAngle = 0;
         finished = false;
+        dbtime = 0;
 
 
         REFRESH_RATE = 100;
@@ -187,6 +188,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     public void onDestroy() {
         super.onDestroy();
         getActivity().getApplicationContext().unbindService(this);
+        mHandler.removeCallbacks(startTimer);
     }
 
     public void onStart() {
@@ -305,15 +307,15 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
                                         mHandler2.removeCallbacks(angle);
                                         mHandler2.postDelayed(angle, 0);
 
-                                        if (d >= 40 && aloitettu == false && kellotettu == false) {
+                                        if (d >= 40 && aloitettu == false && kellotettu == false && finished == true ) {
                                             aloitettu = true;
                                             startTime = System.currentTimeMillis();
                                             mHandler.removeCallbacks(startTimer);
                                             mHandler.postDelayed(startTimer, 0);
 
-
                                         }
-                                        if (d > 120) {
+
+                                        if (d > 160) {
                                             kellotettu = true;
                                         }
                                         if (d < 45 && kellotettu == true && loppu == false) {
@@ -326,9 +328,7 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
 
                                         }
                                         if (kellotettu == true && aloitettu == true && loppu == true) {
-
                                             mHandler.removeCallbacks(startTimer);
-
 
                                         }
 
@@ -381,27 +381,27 @@ public class KellotusFragment extends Fragment implements GoogleApiClient.Connec
     private final Runnable startTimer = new Runnable() {
         @Override
         public void run() {
+                elapsedTime = (System.currentTimeMillis() - startTime);
+                mHandler.postDelayed(this, REFRESH_RATE);
+                dbtime = elapsedTime / 1000.0;
+                kellotustime = 1;
+                double valiLuku = (dbtime - 28.9) / 3.7;
+                System.out.println("DBTIME" + dbtime);
+                if ((dbtime - 0.6) >= 2.5 && (dbtime - 0.6) < 5) kellotustime = 2;
+                else if ((dbtime - 0.6) >= 5 && (dbtime - 0.6) < 8) kellotustime = 3;
+                else if ((dbtime - 0.6) >= 8 && (dbtime - 0.6) < 11) kellotustime = 4;
+                else if ((dbtime - 0.6) >= 11 && (dbtime - 0.6) < 14.3) kellotustime = 5;
+                else if ((dbtime - 0.6) >= 14.3 && (dbtime - 0.6) < 17.6) kellotustime = 6;
+                else if ((dbtime - 0.6) >= 17.6 && (dbtime - 0.6) < 21.1) kellotustime = 7;
+                else if ((dbtime - 0.6) >= 21.1 && (dbtime - 0.6) < 24.6) kellotustime = 8;
+                else if ((dbtime - 0.6) >= 24.6 && (dbtime - 0.6) < 28.9) kellotustime = 9;
+                else if ((dbtime - 28.9) > 0) kellotustime = (int) valiLuku + 10;
 
-            elapsedTime = (System.currentTimeMillis() - startTime);
-            mHandler.postDelayed(this, REFRESH_RATE);
-            dbtime = elapsedTime / 1000.0;
-            kellotustime = 1;
-            double valiLuku = (dbtime-28.9)/3.7;
-            System.out.println("DBTIME" +dbtime);
-            if ((dbtime-0.6) >= 2.5 && (dbtime-0.6)<5)kellotustime = 2;
-            else if((dbtime-0.6) >= 5 && (dbtime-0.6)< 8) kellotustime = 3;
-            else if((dbtime-0.6) >= 8 && (dbtime-0.6) < 11) kellotustime = 4;
-            else if((dbtime-0.6) >= 11 && (dbtime-0.6) < 14.3) kellotustime = 5;
-            else if((dbtime-0.6) >= 14.3 && (dbtime-0.6) < 17.6) kellotustime = 6;
-            else if((dbtime-0.6) >= 17.6 && (dbtime-0.6) < 21.1) kellotustime = 7;
-            else if((dbtime-0.6) >= 21.1 && (dbtime-0.6) < 24.6) kellotustime = 8;
-            else if((dbtime-0.6) >= 24.6 && (dbtime-0.6) < 28.9) kellotustime = 9;
-            else if ((dbtime-28.9) > 0) kellotustime = (int) valiLuku + 10;
-
-            textView.setText(""+kellotustime);
-            textView2.setText("" + elapsedTime / 1000.0+"s");
+                textView.setText("" + kellotustime);
+                textView2.setText("" + elapsedTime / 1000.0 + "s");
         }
     };
+
     private final Runnable angle = new Runnable() {
         @Override
         public void run() {

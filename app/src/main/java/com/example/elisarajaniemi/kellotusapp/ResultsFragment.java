@@ -93,7 +93,6 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
             public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(position).latitude, rdbh.getResults().get(position).longitude), 17);
                 map.animateCamera(cameraUpdate);
-
             }
 
         });
@@ -116,7 +115,6 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
                 if (ri.comment.length() > 0)sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + " "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.comment + "\n" + ri.address);
                 else sendIntent.putExtra(Intent.EXTRA_TEXT, ri.name + " "+ ri.kellotusTime + " (" + ri.time + "s)\n" + ri.address);
                 sendIntent.setType("text/plain");
-                //sendIntent.setPackage("com.whatsapp");
                 startActivity(sendIntent);
                 return true;
             }
@@ -255,5 +253,6 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
 
         gac.connect();
     }
+
 }
 

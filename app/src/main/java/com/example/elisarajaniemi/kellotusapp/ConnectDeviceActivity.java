@@ -135,6 +135,7 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -144,7 +145,6 @@ public class ConnectDeviceActivity extends AppCompatActivity implements ServiceC
             @Override
             public void onPageSelected(int position) {
                 adapter.notifyDataSetChanged();
-                //notifyDataSetChanged();
             }
 
             @Override
