@@ -17,6 +17,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@mipmap/sort_icon</item>
+    </style>
+
 
     <style name="MySpinnerTheme" parent="AppTheme.NoActionBar">
         <item name="android:spinnerItemStyle">@style/MySpinnerItem</item>
@@ -30,6 +34,17 @@
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="spinner_style" >
+        <item name="android:background">@drawable/spinner_bg</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+
     </style>
 
 </resources>

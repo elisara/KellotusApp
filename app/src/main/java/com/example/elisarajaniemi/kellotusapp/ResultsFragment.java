@@ -156,7 +156,7 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
     public void addItemsOnSpinner() {
         List<String> list = new ArrayList<String>();
         list.add("DATE");
-        list.add("RESULT");
+        list.add("RESULT  ");
         list.add("NAME");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

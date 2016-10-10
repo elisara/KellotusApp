@@ -42,13 +42,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent">
         <Spinner
             android:id="@+id/sort"
-            android:layout_weight="1"
             android:textColor="#FFFFFF"
-            android:background="@android:color/transparent"
+            android:popupBackground="@android:color/white"
+            style="@style/spinner_style"
+            android:paddingTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
+            </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
