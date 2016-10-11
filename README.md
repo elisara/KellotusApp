@@ -5,7 +5,7 @@ With this application, you can time how long it takes for you to finish your bee
 The application uses the phones GPS sensor to locate you in the world and 
 an external accelerometer to calculate the time.
 ```
-![demo](https://github.com/elisara/KellotusApp/blob/master/Screenshots/Kellotus%20(1).gif)
+![demo](https://github.com/elisara/KellotusApp/blob/master/Screenshots/Kellotus%20(1).gif =250x250)
 ## Installation
 ```
 1. Download the APK to your device
