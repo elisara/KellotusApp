@@ -1,5 +1,5 @@
 
-# ![AppIcon](https://github.com/elisara/KellotusApp/blob/master/app/src/main/res/mipmap-hdpi/bottle.png) <h1>KellotusApp</h1>
+# ![AppIcon](https://github.com/elisara/KellotusApp/blob/master/app/src/main/res/mipmap-hdpi/bottle.png) <h2>KellotusApp</h2>
 ```
 With this application, you can time how long it takes for you to finish your beer.
 The application uses the phones GPS sensor to locate you in the world and 
