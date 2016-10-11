@@ -38,7 +38,7 @@ Here is the current list of features ver 1.0
 
 ## Screen shots
 
-[Image1](https://photos.google.com/photo/AF1QipPVUrTq_gs-YO9FpikDXcKTAsJMRtSYI-3-BC7q)
+![Image1](https://photos.google.com/photo/AF1QipPVUrTq_gs-YO9FpikDXcKTAsJMRtSYI-3-BC7q)
 
 
 ```
