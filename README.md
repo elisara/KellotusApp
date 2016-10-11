@@ -6,7 +6,7 @@ The application uses the phones GPS sensor to locate you in the world and
 an external accelerometer to calculate the time.
 ```
 
-## <h1>Installation</h1>
+## Installation
 ```
 1. Download the APK to your device
 2. Install the application via the APK
