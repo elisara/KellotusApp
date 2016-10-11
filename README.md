@@ -18,6 +18,7 @@ Here is the current list of features ver 1.0
 -Locates the user utilizing Google Maps and displays the closest address
 -Pin results to map
 -Share results to social media
+-UI design follows Android guidelines
 
 
 ```
