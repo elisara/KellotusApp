@@ -1,5 +1,5 @@
 
-# ![AppIcon](https://github.com/elisara/KellotusApp/app/src/main/res/mipmap-xhdpi/bottle.png)
+# ![AppIcon](https://github.com/elisara/KellotusApp/blob/master/app/src/main/res/mipmap-xhdpi/bottle.png)
 # KellotusApp
 ```
 With this application, you can time how long it takes for you to finish your beer.
