@@ -1,6 +1,8 @@
 # KellotusApp
 ```
-With this application, you can time how long it takes for you to finish your beer. The application uses the phones GPS sensor to locate you in the world and an external accelerometer to calculate the time.
+With this application, you can time how long it takes for you to finish your beer.
+The application uses the phones GPS sensor to locate you in the world and 
+an external accelerometer to calculate the time.
 ```
 ## Features
 
