@@ -10,9 +10,9 @@ Here is the current list of features ver 1.0
 -Real time illustration of can movements
 -Scale for different size handsets
 -Save results to internal memory
+-Locates the user utilizing Google Maps and displays the closest address
 -Pin results to map
 -Share results to social media
--Locates the user utilizing Google Maps and displays the closest address
 
 ```
 ## Team
