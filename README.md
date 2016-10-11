@@ -5,6 +5,19 @@ With this application, you can time how long it takes for you to finish your bee
 The application uses the phones GPS sensor to locate you in the world and 
 an external accelerometer to calculate the time.
 ```
+
+## Installation
+```
+1. Download the APK to your device
+2. Install the application via the APK
+
+OR
+
+1. Clone this project
+2. Open the project in Android Studio
+3. Run the project in Android Studio
+```
+
 ## Features
 
 ```
