@@ -1,12 +1,12 @@
 
-# ![AppIcon](https://github.com/elisara/KellotusApp/blob/master/app/src/main/res/mipmap-hdpi/bottle.png) <font size="1">KellotusApp</font>
+# ![AppIcon](https://github.com/elisara/KellotusApp/blob/master/app/src/main/res/mipmap-hdpi/bottle.png) <font size="30">KellotusApp</font>
 ```
 With this application, you can time how long it takes for you to finish your beer.
 The application uses the phones GPS sensor to locate you in the world and 
 an external accelerometer to calculate the time.
 ```
 
-## Installation
+## <h1>Installation</h1>
 ```
 1. Download the APK to your device
 2. Install the application via the APK
