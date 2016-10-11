@@ -8,7 +8,7 @@ Here is the current list of features ver 1.0
 -Real time illustration of can movements
 -Scale for different size handsets
 -Save results to internal memory
--Pins results to map
+-Pin results to map
 -Share results to social media
 ```
 ## Team
