@@ -44,7 +44,7 @@ Here is the current list of features ver 1.0
 <img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Screenshot_2016-10-04-14-43-10.png" width="200"><br>
 <img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Screenshot_20161011-131314.png" width="200">
 <img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Screenshot_20161011-131320.png" width="200">
-<img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Kellotus%20(1).gif" width="200">
+<img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Kellotus_40.gif" width="200">
 
 
 
