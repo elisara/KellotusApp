@@ -38,7 +38,7 @@ Here is the current list of features ver 1.0
 
 ## Screen shots
 
-<img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Screenshot_20161011-124013.png" alt="Drawing" style="width:200px;"/>
+<img src="https://github.com/elisara/KellotusApp/blob/master/Screenshots/Screenshot_20161011-124013.png" width="200">
 
 
 
