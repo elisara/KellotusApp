@@ -128,19 +128,6 @@ public class MainActivity extends AppCompatActivity  implements BleScannerFragme
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_disconnect) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

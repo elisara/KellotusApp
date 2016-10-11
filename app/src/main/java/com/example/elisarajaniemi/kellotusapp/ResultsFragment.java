@@ -91,7 +91,8 @@ public class ResultsFragment extends Fragment implements GoogleApiClient.Connect
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int position, long rowId) {
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(rdbh.getResults().get(position).latitude, rdbh.getResults().get(position).longitude), 17);
+                ResultItem resultItem = (ResultItem)resultlist.get(position);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(resultItem.latitude, resultItem.longitude), 17);
                 map.animateCamera(cameraUpdate);
             }
 
